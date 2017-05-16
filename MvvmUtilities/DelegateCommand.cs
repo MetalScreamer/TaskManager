@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace Jsc.MvvmUtilities
 {
-    public class Delegatecommand : ICommand
+    public class DelegateCommand : ICommand
     {
         private Action<object> execute;
         private Predicate<object> canExecute;
 
         public event EventHandler CanExecuteChanged;
 
-        public Delegatecommand(Action<object> execute, Predicate<object> canExecute = null)
+        public DelegateCommand(Action<object> execute, Predicate<object> canExecute = null)
         {
             this.execute = execute;
             this.canExecute = canExecute ?? (p => true);
