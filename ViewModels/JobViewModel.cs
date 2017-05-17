@@ -1,4 +1,5 @@
 ﻿using Jsc.MvvmUtilities;
+using Jsc.TaskManager.Models;
 using System.Collections.ObjectModel;
 
 namespace Jsc.TaskManager.ViewModels

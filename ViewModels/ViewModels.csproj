@@ -35,15 +35,16 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <ProjectReference Include="..\Models\Models.csproj">
+      <Project>{D46CC1E9-005D-42F9-8EEE-E37E32256323}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MvvmUtilities\MvvmUtilities.csproj">
       <Project>{4473a485-ef39-4590-a030-0e2f2c0c970a}</Project>
       <Name>MvvmUtilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IJob.cs" />
-    <Compile Include="INote.cs" />
-    <Compile Include="ITask.cs" />
     <Compile Include="JobListViewModel.cs" />
     <Compile Include="JobViewModel.cs" />
     <Compile Include="NoteViewModel.cs" />
