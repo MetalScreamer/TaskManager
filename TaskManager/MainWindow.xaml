@@ -7,8 +7,37 @@
         xmlns:local="clr-namespace:TaskManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    
+    <Window.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Width" Value="75" />
+            <Setter Property="Height" Value="23" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style x:Key="PropertyLabel" TargetType="TextBlock">
+            <Setter Property="HorizontalAlignment" Value="Right" />
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+    </Window.Resources>
     <Grid>
-        <Button Content="Click" Command="{wpf:CommandBinding Btn}" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />            
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="LeftToRight">
+            <Button Content="Undo" Command="{wpf:CommandBinding Undo}" />
+            <Button Content="Redo" Command="{wpf:CommandBinding Redo}" />
+        </StackPanel>
+        <TextBlock Grid.Row="1" Text="Prop 1:"  Style="{StaticResource PropertyLabel}" />
+        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding TestProp1}" />
+        <TextBlock Grid.Row="2" Text="Prop 2:"  Style="{StaticResource PropertyLabel}" />
+        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding TestProp2}" />
     </Grid>
 </Window>

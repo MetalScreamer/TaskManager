@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,40 @@ namespace Jsc.MvvmUtilities
             Redo = new DelegateCommand(_ => DoRedo(), _ => CanRedo());
         }
 
+        protected void ExecuteCommand(UndoCommand cmd)
+        {
+            cmd.Do();
+            AddCommand(cmd);
+        }
+
+        protected void AddCommand(UndoCommand cmd)
+        {
+            RedoStack.Clear();
+            UndoStack.Push(cmd);
+            StackStatesChanged();
+        }
+
+        protected bool SetProperty<T>(ref T storage, T value, Action<T> setter, [CallerMemberName] string propertyName = null)
+        {
+            var oldValue = storage;
+            if (base.SetProperty(ref storage, value, propertyName))
+            {
+                AddCommand(new UndoCommand(
+                    () =>
+                    {
+                        setter(value);
+                        RaisePropertyChanged(propertyName);
+                    },
+                    () =>
+                    {
+                        setter(oldValue);
+                        RaisePropertyChanged(propertyName);
+                    }));
+                return true;
+            }
+            return false;
+        }
+
         private bool CanRedo()
         {
             return RedoStack.Count > 0;
@@ -31,7 +66,7 @@ namespace Jsc.MvvmUtilities
             redoCommand.Do();
             UndoStack.Push(redoCommand);
             StackStatesChanged();
-        }        
+        }
 
         private bool CanUndo()
         {
@@ -44,15 +79,7 @@ namespace Jsc.MvvmUtilities
             undoCommand.Undo();
             RedoStack.Push(undoCommand);
             StackStatesChanged();
-        }
-
-        protected void ExecuteCommand(UndoCommand cmd)
-        {
-            RedoStack.Clear();
-            cmd.Do();
-            UndoStack.Push(cmd);
-            StackStatesChanged();
-        }
+        }        
 
         private void StackStatesChanged()
         {

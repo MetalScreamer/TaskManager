@@ -25,7 +25,7 @@ namespace TaskManager
         {
             InitializeComponent();
 
-            //this.DataContext = new TestVm();
+            this.DataContext = new TaskViewModel();
         }
     }
 }
