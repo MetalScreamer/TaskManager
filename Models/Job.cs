@@ -31,7 +31,7 @@ namespace Jsc.TaskManager.Models
         {
             get
             {
-                //dont return list and give them a hack
+                //dont return list and give clients a hack
                 return Tasks.OfType<ITask>();
             }
         }
@@ -40,7 +40,7 @@ namespace Jsc.TaskManager.Models
         {
             get
             {
-                //dont return list and give them a hack
+                //dont return list and give clients a hack
                 return Notes.OfType<INote>();
             }
         }

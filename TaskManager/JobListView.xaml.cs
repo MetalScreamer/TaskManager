@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TaskManager
+namespace Jsc.TaskManager
 {
     /// <summary>
     /// Interaction logic for JobListView.xaml

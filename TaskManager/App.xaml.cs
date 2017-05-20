@@ -5,7 +5,7 @@ using Microsoft.Practices.Unity;
 using System;
 using System.Windows;
 
-namespace TaskManager
+namespace Jsc.TaskManager
 {
     /// <summary>
     /// Interaction logic for App.xaml
