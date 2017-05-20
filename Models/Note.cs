@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Jsc.TaskManager.Models
 {
@@ -8,9 +9,11 @@ namespace Jsc.TaskManager.Models
         string Text { get; set; }
     }
 
-    internal class Note
+    public class Note : INote
     {
+        public long NoteId { get; private set; }
+
         public DateTime DateTime { get; set; }
         public string Text { get; set; }
-    }
+    }    
 }

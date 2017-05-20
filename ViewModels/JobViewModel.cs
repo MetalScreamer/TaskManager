@@ -1,10 +1,17 @@
-﻿using Jsc.MvvmUtilities;
-using Jsc.TaskManager.Models;
+﻿using Jsc.TaskManager.Models;
 using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
+using Jsc.MvvmUtilities;
 
 namespace Jsc.TaskManager.ViewModels
 {
-    internal class JobViewModel : ViewModelBase
+    public interface IJobViewModel
+    {
+
+    }
+
+    public class JobViewModel : ViewModelBase, IJobViewModel
     {
         private string name;
         private string description;
@@ -28,6 +35,20 @@ namespace Jsc.TaskManager.ViewModels
         public JobViewModel(IJob job)
         {
             this.job = job;
+            Name = job.Name;
+            Description = job.Description;
+            PopulateNotes(job.Notes);
+            PopulateTasks(job.Tasks);
+        }
+
+        private void PopulateTasks(IEnumerable<ITask> tasks)
+        {
+            //throw new NotImplementedException();
+        }
+
+        private void PopulateNotes(IEnumerable<INote> notes)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

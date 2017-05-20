@@ -1,12 +1,17 @@
 ﻿using Jsc.MvvmUtilities;
 using Jsc.TaskManager.Models;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Jsc.TaskManager.ViewModels
+namespace Jsc.TaskManager.ViewModels2
 {
     public interface INoteViewModel
     {
-
+        string Text { get; set; }
+        DateTime DateTime { get; set; }
     }
 
     public class NoteViewModel : UndoableViewModel, INoteViewModel

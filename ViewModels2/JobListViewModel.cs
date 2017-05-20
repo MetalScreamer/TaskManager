@@ -1,9 +1,13 @@
 ﻿using Jsc.MvvmUtilities;
 using Jsc.TaskManager.Models;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Jsc.TaskManager.ViewModels
+namespace Jsc.TaskManager.ViewModels2
 {
     public interface IJobListViewModel
     {
@@ -19,7 +23,6 @@ namespace Jsc.TaskManager.ViewModels
         public DelegateCommand AddJob { get; }
         public DelegateCommand RemoveJob { get; }
         public IJobViewModel SelectedJob { get; set; }
-
 
         public JobListViewModel(ITaskManagerDbContext db, Func<IJob, IJobViewModel> existingJobFactory, Func<IJobViewModel> newJobFactory)
         {

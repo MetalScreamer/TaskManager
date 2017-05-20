@@ -1,10 +1,12 @@
-﻿using Jsc.TaskManager.Models;
+﻿using Jsc.MvvmUtilities;
+using Jsc.TaskManager.Models;
 using System;
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
-using Jsc.MvvmUtilities;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
 
-namespace Jsc.TaskManager.ViewModels
+namespace Jsc.TaskManager.ViewModels2
 {
     public interface ITaskViewModel { }
 
