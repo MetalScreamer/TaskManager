@@ -141,12 +141,8 @@
       <Project>{dddcbf1c-9071-424d-9f8f-7b701393874a}</Project>
       <Name>TaskManagerDAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ViewModels2\ViewModels2.csproj">
+    <ProjectReference Include="..\ViewModels2\ViewModels.csproj">
       <Project>{2046b129-0272-4dc1-b55b-5c86f13bf961}</Project>
-      <Name>ViewModels2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ViewModels\ViewModels.csproj">
-      <Project>{42bcfa89-c73a-4d5b-85a3-3230e7e6c72c}</Project>
       <Name>ViewModels</Name>
     </ProjectReference>
     <ProjectReference Include="..\Wpf\Wpf.csproj">

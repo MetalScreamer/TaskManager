@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 
-namespace Jsc.TaskManager.ViewModels2
+namespace Jsc.TaskManager.ViewModels
 {
     public interface ITaskViewModel { }
 

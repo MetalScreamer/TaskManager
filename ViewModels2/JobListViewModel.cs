@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jsc.TaskManager.ViewModels2
+namespace Jsc.TaskManager.ViewModels
 {
     public interface IJobListViewModel
     {

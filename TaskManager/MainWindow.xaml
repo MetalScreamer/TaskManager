@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"        
         xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
-        xmlns:vm="clr-namespace:Jsc.TaskManager.ViewModels2;assembly=Jsc.TaskManager.ViewModels2"
+        xmlns:vm="clr-namespace:Jsc.TaskManager.ViewModels;assembly=Jsc.TaskManager.ViewModels"
         xmlns:local="clr-namespace:TaskManager"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">

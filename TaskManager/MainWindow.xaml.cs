@@ -1,4 +1,4 @@
-﻿using Jsc.TaskManager.ViewModels2;
+﻿using Jsc.TaskManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

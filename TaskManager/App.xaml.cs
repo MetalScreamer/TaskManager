@@ -1,6 +1,6 @@
 ﻿using Jsc.TaskManager.DAL;
 using Jsc.TaskManager.Models;
-using Jsc.TaskManager.ViewModels2;
+using Jsc.TaskManager.ViewModels;
 using Microsoft.Practices.Unity;
 using System;
 using System.Windows;
