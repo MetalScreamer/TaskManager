@@ -57,8 +57,15 @@ namespace Jsc.TaskManager.ViewModels
                 Jobs.Add(existingJobFactory(contentManager, job));
             }
 
+            JobListMenu.Add(new MenuItem() { Text = "Edit Job", Command = new DelegateCommand(_ => EditJob()) });
+
             AddJob = new DelegateCommand(_ => DoAddJob(newJobFactory));
             RemoveJob = new DelegateCommand(_ => Jobs.Remove(SelectedJob), _ => SelectedJob != null);
+        }
+
+        private void EditJob()
+        {
+            contentManager.LoadContent(SelectedJob);
         }
 
         private void DoAddJob(Func<IContentManager, IJobViewModel> jobFactory)

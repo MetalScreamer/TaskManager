@@ -10,11 +10,16 @@ namespace Jsc.MvvmUtilities
     {
         public static string GetUniqueName(this IEnumerable<IHasName> me, string baseName)
         {
-            //initialize to one because the Any method will immediately return true without evaluating the pre-increment when the list is empty;
             var counter = 1;
-            var getName = (Func<int, string>)((num) => $"{baseName} {num}");
-            while (me.Any(n => string.Equals(n.Name, getName(++counter), StringComparison.OrdinalIgnoreCase))) ;
-            return getName(counter);            
+            string result;
+
+            do
+            {
+                result = $"{baseName} {counter}";
+                counter++;
+            } while (me.Any(n => n.Name.Equals(result, StringComparison.OrdinalIgnoreCase)));
+
+            return result;
         }
     }
 }

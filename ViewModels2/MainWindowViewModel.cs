@@ -52,7 +52,7 @@ namespace Jsc.TaskManager.ViewModels
 
         private bool CanDoPrevious()
         {
-            return previousStack.Count < 0;
+            return previousStack.Count > 0;
         }
 
         private void DoPrevious()
