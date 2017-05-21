@@ -11,40 +11,19 @@
     <Window.Resources>
         
     </Window.Resources>
-    <!--<Grid>
-        <ContentControl Content=""
-    </Grid>-->
-    <!--<Window.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Width" Value="75" />
-            <Setter Property="Height" Value="23" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style x:Key="PropertyLabel" TargetType="TextBlock">
-            <Setter Property="HorizontalAlignment" Value="Right" />
-            <Setter Property="Margin" Value="5" />
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="Margin" Value="5" />
-        </Style>
-    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="*" />            
-        </Grid.ColumnDefinitions>
-        <StackPanel Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="LeftToRight">
-            <Button Content="Undo" Command="{wpf:CommandBinding Undo}" />
-            <Button Content="Redo" Command="{wpf:CommandBinding Redo}" />
-        </StackPanel>
-        <TextBlock Grid.Row="1" Text="Prop 1:"  Style="{StaticResource PropertyLabel}" />
-        <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding Name}" />
-        <TextBlock Grid.Row="2" Text="Prop 2:"  Style="{StaticResource PropertyLabel}" />
-        <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding Description}" />
-    </Grid>-->
+        <Border BorderBrush="Black" BorderThickness="1" Padding="2.5" Margin="5">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Previous" Command="{wpf:CommandBinding Previous}" />
+                <Button Content="Next" Command="{wpf:CommandBinding Next}" />
+            </StackPanel>
+        </Border>
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="1" Padding="2.5" Margin="5,0,5,5">
+            <ContentControl Content="{Binding Content}" />
+        </Border>
+    </Grid>    
 </Window>

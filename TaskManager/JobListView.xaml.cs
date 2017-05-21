@@ -24,5 +24,35 @@ namespace Jsc.TaskManager
         {
             InitializeComponent();
         }
+
+        private void DataGrid_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            var cell = GetCell(e);
+
+            if (cell == null)
+            {
+                var dataGrid = (sender as DataGrid);
+                dataGrid.SelectedItem = null;
+            }
+        }
+
+        private void DataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var cell = GetCell(e);
+
+            if (cell != null)
+            {
+                (sender as DataGrid).SelectedItem = cell.DataContext;
+            }
+        }
+
+        private static DataGridCell GetCell(MouseButtonEventArgs e)
+        {
+            var dependencyObject = e.OriginalSource as DependencyObject;
+            while (dependencyObject != null && dependencyObject.GetType() != typeof(DataGridCell))
+                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
+
+            return dependencyObject as DataGridCell;
+        }
     }
 }

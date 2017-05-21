@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.ViewModels
 {
-    public interface IJobViewModel
+    public interface IJobViewModel : IHasName
     {
-        string Name { get; set; }
         string Description { get; set; }
         ObservableCollection<ITaskViewModel> Tasks { get; }
         ObservableCollection<INoteViewModel> Notes { get; }
@@ -20,6 +19,7 @@ namespace Jsc.TaskManager.ViewModels
     {
         private string description;
         private string name;
+        private IContentManager contentManager;
 
         public string Description
         {
@@ -35,5 +35,10 @@ namespace Jsc.TaskManager.ViewModels
 
         public ObservableCollection<INoteViewModel> Notes { get; } = new ObservableCollection<INoteViewModel>();
         public ObservableCollection<ITaskViewModel> Tasks { get; } = new ObservableCollection<ITaskViewModel>();
+
+        public JobViewModel(IContentManager contentManager)
+        {
+            this.contentManager = contentManager;
+        }
     }
 }

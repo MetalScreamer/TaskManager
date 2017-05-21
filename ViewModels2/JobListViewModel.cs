@@ -19,20 +19,53 @@ namespace Jsc.TaskManager.ViewModels
 
     public class JobListViewModel : ViewModelBase, IJobListViewModel
     {
+        private IContentManager contentManager;
+        private IJobViewModel selectedJob;
+        private bool gridMenuVisible;
+
         public ObservableCollection<IJobViewModel> Jobs { get; } = new ObservableCollection<IJobViewModel>();
+        public ObservableCollection<MenuItem> JobListMenu { get; } = new ObservableCollection<MenuItem>();
+
         public DelegateCommand AddJob { get; }
         public DelegateCommand RemoveJob { get; }
-        public IJobViewModel SelectedJob { get; set; }
-
-        public JobListViewModel(ITaskManagerDbContext db, Func<IJob, IJobViewModel> existingJobFactory, Func<IJobViewModel> newJobFactory)
+        public IJobViewModel SelectedJob
         {
+            get { return selectedJob; }
+            set
+            {
+                SetProperty(ref selectedJob, value);
+                RemoveJob.RaiseCanExecuteChanged();
+            }
+        }
+
+        public bool GridMenuVisible
+        {
+            get { return gridMenuVisible; }
+            set
+            {
+                if (value && SelectedJob == null) value = false;
+                SetProperty(ref gridMenuVisible, value);
+            }
+        }
+
+        public JobListViewModel(ITaskManagerDbContext db, IContentManager contentManager, Func<IContentManager, IJob, IJobViewModel> existingJobFactory, Func<IContentManager, IJobViewModel> newJobFactory)
+        {
+            this.contentManager = contentManager;
+
             foreach (var job in db.Jobs)
             {
-                Jobs.Add(existingJobFactory(job));
+                Jobs.Add(existingJobFactory(contentManager, job));
             }
 
-            AddJob = new DelegateCommand(_ => Jobs.Add(newJobFactory()));
+            AddJob = new DelegateCommand(_ => DoAddJob(newJobFactory));
             RemoveJob = new DelegateCommand(_ => Jobs.Remove(SelectedJob), _ => SelectedJob != null);
+        }
+
+        private void DoAddJob(Func<IContentManager, IJobViewModel> jobFactory)
+        {
+            var job = jobFactory(contentManager);
+            job.Name = Jobs.GetUniqueName("Job");
+            Jobs.Add(job);
         }
     }
 }

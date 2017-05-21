@@ -21,11 +21,11 @@ namespace Jsc.TaskManager
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow(IJobListViewModel jobListViewModel)
+        public MainWindow(IMainWindowViewModel vm)
         {
             InitializeComponent();
 
-            this.Content = jobListViewModel; //new JobListView() { DataContext = jobListViewModel };
+            this.DataContext = vm;
         }
     }
 }

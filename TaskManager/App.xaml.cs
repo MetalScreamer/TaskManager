@@ -19,7 +19,10 @@ namespace Jsc.TaskManager
             container = new UnityContainer();
             TaskManagerDbContext.Initialize();
             RegisterTypes(container);
-            var win = new MainWindow(container.Resolve<IJobListViewModel>());
+            var vm = container.Resolve<IMainWindowViewModel>();
+            var win = new MainWindow(vm);
+            vm.Content = container.Resolve<IJobListViewModel>(new ParameterOverride("contentManager", vm));    
+                    
             win.Show();
         }
 
@@ -30,11 +33,13 @@ namespace Jsc.TaskManager
                 .RegisterType<ITask, Task>()
                 .RegisterType<INote, Note>()
                 .RegisterType<ITaskManagerDbContext, TaskManagerDbContext>()
+                .RegisterType<IMainWindowViewModel, MainWindowViewModel>()
                 .RegisterType<IJobListViewModel, JobListViewModel>()
                 .RegisterType<IJobViewModel, JobViewModel>()
                 .RegisterType<ITaskViewModel, TaskViewModel>()
                 .RegisterType<INoteViewModel, NoteViewModel>()
-                .RegisterInstance<Func<IJob, IJobViewModel>>(j => container.Resolve<IJobViewModel>(new ParameterOverride("job", j)))
+                .RegisterInstance<Func<IContentManager, IJob, IJobViewModel>>((cm, j) => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("job", j)))
+                .RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
                 .RegisterInstance<Func<ITask, ITaskViewModel>>(t => container.Resolve<ITaskViewModel>(new ParameterOverride("task", t)))
                 .RegisterInstance<Func<INote, INoteViewModel>>(n => container.Resolve<INoteViewModel>(new ParameterOverride("note", n)))
                 ;

@@ -6,8 +6,31 @@
              Startup="Application_Startup"
              Exit="Application_Exit">
     <Application.Resources>
+        <ControlTemplate x:Key="menuSeperator">
+            <Separator />
+        </ControlTemplate>
+        
         <DataTemplate DataType="{x:Type vm:JobListViewModel}" >
             <local:JobListView />
         </DataTemplate>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="2.5" />
+            <Setter Property="Width" Value="75" />
+            <Setter Property="Height" Value="23" />
+        </Style>
+
+        <Style TargetType="MenuItem">
+            <Setter Property="Header" Value="{Binding Text}" />
+            <Setter Property="Command" Value="{Binding Command}" />
+            <Setter Property="CommandParameter" Value="{Binding CommandParameter}" />
+            <Setter Property="ItemsSource" Value="{Binding Children}" />
+
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSeperator}" Value="True">
+                    <Setter Property="Template" Value="{StaticResource menuSeperator}" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Application.Resources>
 </Application>
