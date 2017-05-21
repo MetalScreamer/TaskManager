@@ -7,13 +7,17 @@
              Startup="Application_Startup"
              Exit="Application_Exit">
     <Application.Resources>
-        <ControlTemplate x:Key="menuSeperator">
-            <Separator />
-        </ControlTemplate>
-        
         <DataTemplate DataType="{x:Type vm:JobListViewModel}" >
             <local:JobListView />
         </DataTemplate>
+
+        <DataTemplate DataType="{x:Type vm:JobViewModel}">
+            <local:JobView />
+        </DataTemplate>
+
+        <ControlTemplate x:Key="menuSeperator">
+            <Separator />
+        </ControlTemplate>
 
         <Style TargetType="Button">
             <Setter Property="Margin" Value="2.5" />

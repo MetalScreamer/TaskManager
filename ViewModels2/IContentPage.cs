@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.ViewModels
 {
-    public interface IContentManager
+    public interface IContentPage
     {
-        void Load(object content);
-        void Unload(object content);
+        void Loaded();
     }
 }

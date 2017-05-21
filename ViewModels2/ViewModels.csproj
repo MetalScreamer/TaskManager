@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IContentManager.cs" />
+    <Compile Include="IContentPage.cs" />
     <Compile Include="JobListViewModel.cs" />
     <Compile Include="JobViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />

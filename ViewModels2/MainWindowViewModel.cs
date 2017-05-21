@@ -69,10 +69,15 @@ namespace Jsc.TaskManager.ViewModels
                 if(clearNext) nextStack.Clear();
                 Next.RaiseCanExecuteChanged();
                 Previous.RaiseCanExecuteChanged();
+
+                if (content is IContentPage)
+                {
+                    (content as IContentPage).Loaded();
+                }
             }
         }
 
-        void IContentManager.LoadContent(object content)
+        void IContentManager.Load(object content)
         {
             Content = content;
         }
