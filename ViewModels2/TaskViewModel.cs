@@ -8,7 +8,16 @@ using System.Text;
 
 namespace Jsc.TaskManager.ViewModels
 {
-    public interface ITaskViewModel { }
+    public interface ITaskViewModel : IHasName
+    {
+        string Description { get; set; }
+        DateTime DueDate { get; set; }
+        TaskPriority Priority { get; set; }
+        TaskStatus Status { get; set; }
+
+        ObservableCollection<INoteViewModel> Notes { get; }
+        ObservableCollection<ITaskViewModel> Children { get; }
+    }
 
     public class TaskViewModel : UndoableViewModel, ITaskViewModel
     {
@@ -19,6 +28,10 @@ namespace Jsc.TaskManager.ViewModels
         private TaskStatus status;
 
         private ITask task;
+        private Func<ITaskViewModel> taskFactory;
+        private Func<INoteViewModel> noteFactory;
+        private ITaskViewModel selectedTask;
+        private INoteViewModel selectedNote;
 
         public string Name
         {
@@ -50,10 +63,28 @@ namespace Jsc.TaskManager.ViewModels
             set { SetProperty(ref status, value, v => status = v); }
         }
 
-        public ObservableCollection<NoteViewModel> Notes { get; } = new ObservableCollection<NoteViewModel>();
-        public ObservableCollection<TaskViewModel> Children { get; } = new ObservableCollection<TaskViewModel>();
+        public ITaskViewModel SelectedTask
+        {
+            get { return selectedTask; }
+            set { SetProperty(ref selectedTask, value, v => selectedTask = v); }
+        }
 
-        public TaskViewModel(ITask task)
+        public INoteViewModel SelectedNote
+        {
+            get { return selectedNote; }
+            set { SetProperty(ref selectedNote, value, v => selectedNote = v); }
+        }
+
+        public ObservableCollection<INoteViewModel> Notes { get; } = new ObservableCollection<INoteViewModel>();
+        public ObservableCollection<ITaskViewModel> Children { get; } = new ObservableCollection<ITaskViewModel>();
+
+        public DelegateCommand AddChild { get; }
+        public DelegateCommand RemoveChild { get; }
+
+        public DelegateCommand AddNote { get; }
+        public DelegateCommand RemoveNote { get; }
+
+        public TaskViewModel(ITask task, Func<ITask, ITaskViewModel> existingTaskFactory, Func<ITaskViewModel> newTaskFactory, Func<INote, INoteViewModel> existingNoteFactory, Func<INoteViewModel> newNoteFactory)
         {
             this.task = task;
             Name = task.Name;
@@ -61,27 +92,64 @@ namespace Jsc.TaskManager.ViewModels
             DueDate = task.DueDate;
             Priority = task.Priority;
             Status = task.Status;
+            taskFactory = newTaskFactory;
+            noteFactory = newNoteFactory;
 
-            PopulateNotes(task.Notes);
-            PopulateChildren(task.Children);
-        }
+            AddChild = new DelegateCommand(_ => DoAddChild());
+            RemoveChild = new DelegateCommand(_ => DoRemoveChild(), _ => CanRemoveChild());
 
-        private void PopulateChildren(IEnumerable<ITask> children)
-        {
-            Children.Clear();
-            foreach (var child in children)
+            AddNote = new DelegateCommand(_ => DoAddNote());
+            RemoveNote = new DelegateCommand(_ => DoRemoveNote(), _ => CanRemoveNote());
+
+            foreach (var child in task.Children)
             {
-                Children.Add(new TaskViewModel(child));
+                Children.Add(existingTaskFactory(child));
+            }
+
+            foreach (var note in task.Notes)
+            {
+                Notes.Add(existingNoteFactory(note));
             }
         }
 
-        private void PopulateNotes(IEnumerable<INote> notes)
+        private bool CanRemoveNote()
         {
-            Notes.Clear();
-            foreach (var note in notes)
-            {
-                Notes.Add(new NoteViewModel(note));
-            }
+            return SelectedNote != null;
+        }
+
+        private void DoRemoveNote()
+        {
+            var selectedNote = SelectedNote;
+            ExecuteCommand(new UndoCommand(
+                () => Notes.Remove(selectedNote),
+                () => Notes.Add(selectedNote)));
+        }
+
+        private void DoAddNote()
+        {
+            var newNote = noteFactory();
+            ExecuteCommand(new UndoCommand(
+                () => Notes.Add(newNote),
+                () => Notes.Remove(newNote)));
+        }
+
+        private bool CanRemoveChild()
+        {
+            return SelectedTask != null;
+        }
+
+        private void DoRemoveChild()
+        {
+            var selectedTask = SelectedTask;
+            ExecuteCommand(new UndoCommand(
+                () => Children.Remove(selectedTask),
+                () => Children.Add(SelectedTask)));
+        }
+
+        private void DoAddChild()
+        {
+            var newTask = taskFactory();
+            newTask.Name = Children.GetUniqueName("Task");
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Jsc.TaskManager.ViewModels
         private IContentManager contentManager;
         private IJobViewModel selectedJob;
         private bool gridMenuVisible = true;
-        
+
         public ObservableCollection<IJobViewModel> Jobs { get; } = new ObservableCollection<IJobViewModel>();
         public ObservableCollection<MenuItem> JobListMenu { get; } = new ObservableCollection<MenuItem>();
 
@@ -35,6 +35,7 @@ namespace Jsc.TaskManager.ViewModels
             {
                 SetProperty(ref selectedJob, value);
                 RemoveJob.RaiseCanExecuteChanged();
+                gridMenuVisible = SelectedJob != null;
             }
         }
 
