@@ -22,8 +22,8 @@ namespace Jsc.TaskManager.ViewModels
         private string name;
         private IContentManager contentManager;
         private IJob job;
-        private Func<INoteViewModel> noteFactory;
-        private Func<ITaskViewModel> taskFactory;
+        private Func<IContentManager, INoteViewModel> noteFactory;
+        private Func<IContentManager, ITaskViewModel> taskFactory;
         private ITaskViewModel selectedTask;
         private INoteViewModel selectedNote;
 
@@ -42,14 +42,24 @@ namespace Jsc.TaskManager.ViewModels
         public ITaskViewModel SelectedTask
         {
             get { return selectedTask; }
-            set { SetProperty(ref selectedTask, value, v => selectedTask = v); }
+            set
+            {
+                SetProperty(ref selectedTask, value, v => selectedTask = v);
+                RemoveTask.RaiseCanExecuteChanged();
+                RebuildTasksContextMenu();
+            }
         }
 
         public INoteViewModel SelectedNote
         {
             get { return selectedNote; }
-            set { SetProperty(ref selectedNote, value, v => selectedNote = v); }
-        }
+            set
+            {
+                SetProperty(ref selectedNote, value, v => selectedNote = v);
+                RemoveNote.RaiseCanExecuteChanged();
+                RebuildNotesContextMenu();
+            }
+        }        
 
         public ObservableCollection<INoteViewModel> Notes { get; } = new ObservableCollection<INoteViewModel>();
         public ObservableCollection<ITaskViewModel> Tasks { get; } = new ObservableCollection<ITaskViewModel>();
@@ -60,12 +70,21 @@ namespace Jsc.TaskManager.ViewModels
         public DelegateCommand AddTask { get; }
         public DelegateCommand RemoveTask { get; }
 
-        public JobViewModel(IContentManager contentManager, IJob job, Func<INote, INoteViewModel> existingNoteFactory, Func<INoteViewModel> newNoteFactory, Func<ITask, ITaskViewModel> existingTaskFactory, Func<ITaskViewModel> newTaskFactory)
+        public ObservableCollection<MenuItem> NotesContextMenu { get; } = new ObservableCollection<MenuItem>();
+        public ObservableCollection<MenuItem> TasksContextMenu { get; } = new ObservableCollection<MenuItem>();
+
+        public JobViewModel(
+            IContentManager contentManager, 
+            IJob job, 
+            Func<IContentManager, INote, INoteViewModel> existingNoteFactory, 
+            Func<IContentManager, INoteViewModel> newNoteFactory, 
+            Func<IContentManager, ITask, ITaskViewModel> existingTaskFactory, 
+            Func<IContentManager, ITaskViewModel> newTaskFactory)
         {
             this.contentManager = contentManager;
             this.job = job;
             noteFactory = newNoteFactory;
-            taskFactory = newTaskFactory; 
+            taskFactory = newTaskFactory;
 
             AddNote = new DelegateCommand(_ => DoAddNote());
             RemoveNote = new DelegateCommand(_ => DoRemoveNote(), _ => CanRemoveNote());
@@ -73,14 +92,14 @@ namespace Jsc.TaskManager.ViewModels
             AddTask = new DelegateCommand(_ => DoAddTask());
             RemoveTask = new DelegateCommand(_ => DoRemoveTask(), _ => CanRemoveTask());
 
-            foreach(var note in job.Notes)
+            foreach (var note in job.Notes)
             {
-                Notes.Add(existingNoteFactory(note));
+                Notes.Add(existingNoteFactory(contentManager, note));
             }
 
-            foreach(var task in job.Tasks)
+            foreach (var task in job.Tasks)
             {
-                Tasks.Add(existingTaskFactory(task));
+                Tasks.Add(existingTaskFactory(contentManager, task));
             }
         }
 
@@ -99,7 +118,7 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoAddTask()
         {
-            var newTask = taskFactory();
+            var newTask = taskFactory(contentManager);
             newTask.Name = Tasks.GetUniqueName("Task");
             ExecuteCommand(new UndoCommand(
                 () => Tasks.Add(newTask),
@@ -108,17 +127,49 @@ namespace Jsc.TaskManager.ViewModels
 
         private bool CanRemoveNote()
         {
-            throw new NotImplementedException();
+            return SelectedNote != null;
         }
 
         private void DoRemoveNote()
         {
-            throw new NotImplementedException();
+            var selectedNote = SelectedNote;
+            ExecuteCommand(new UndoCommand(
+                () => Notes.Remove(selectedNote),
+                () => Notes.Add(selectedNote)));
         }
 
         private void DoAddNote()
         {
-            throw new NotImplementedException();
+            var newNote = noteFactory(contentManager);
+            newNote.DateTime = DateTime.Now;
+
+            ExecuteCommand(new UndoCommand(
+                () => Notes.Add(newNote),
+                () => Notes.Remove(newNote)));
+        }
+
+        private void RebuildNotesContextMenu()
+        {
+            NotesContextMenu.Clear();
+
+            NotesContextMenu.Add(new MenuItem() { Text = "Edit Note", Command = new DelegateCommand(_ => EditNote()) });
+        }
+
+        private void EditNote()
+        {
+            contentManager.Load(SelectedNote);
+        }
+
+        private void RebuildTasksContextMenu()
+        {
+            TasksContextMenu.Clear();
+
+            TasksContextMenu.Add(new MenuItem() { Text = "Edit Task", Command = new DelegateCommand(_ => EditTask()) });
+        }
+
+        private void EditTask()
+        {
+            contentManager.Load(SelectedTask); 
         }
     }
 }

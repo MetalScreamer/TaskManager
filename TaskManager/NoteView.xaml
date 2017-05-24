@@ -1,0 +1,33 @@
+﻿<UserControl x:Class="Jsc.TaskManager.NoteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
+             xmlns:local="clr-namespace:Jsc.TaskManager"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2" Padding="0,0,0,15">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Note:" Style="{StaticResource HeaderTitle}" />
+                <TextBlock Text="{Binding DisplayDateAndTime}" Style="{StaticResource HeaderSubTitle}" />
+            </StackPanel>
+        </Border>
+        <TextBlock Text="Note Text:" Margin="35,10,5,10" Grid.Row="1" />
+        <TextBox Text="{Binding Text}" Margin="5,10,5,10" AcceptsReturn="True" Grid.Column="1" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Auto" />
+        <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" Grid.Row="3" Grid.ColumnSpan="2">
+            <Button Content="Cancel" Command="{wpf:CommandBinding CancelCommand}" />
+            <Button Content="OK" Command="{wpf:CommandBinding OkCommand}" />
+        </StackPanel>
+    </Grid>
+</UserControl>

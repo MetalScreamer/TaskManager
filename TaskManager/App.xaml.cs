@@ -40,8 +40,10 @@ namespace Jsc.TaskManager
                 .RegisterType<INoteViewModel, NoteViewModel>()
                 .RegisterInstance<Func<IContentManager, IJob, IJobViewModel>>((cm, j) => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("job", j)))
                 .RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
-                .RegisterInstance<Func<ITask, ITaskViewModel>>(t => container.Resolve<ITaskViewModel>(new ParameterOverride("task", t)))
-                .RegisterInstance<Func<INote, INoteViewModel>>(n => container.Resolve<INoteViewModel>(new ParameterOverride("note", n)))
+                .RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))
+                .RegisterInstance<Func<IContentManager, ITaskViewModel>>(cm => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm)))
+                .RegisterInstance<Func<IContentManager, INote, INoteViewModel>>((cm, n) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("note", n)))
+                .RegisterInstance<Func<IContentManager, INoteViewModel>>((cm) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm)))
                 ;
         }
 

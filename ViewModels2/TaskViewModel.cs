@@ -28,10 +28,11 @@ namespace Jsc.TaskManager.ViewModels
         private TaskStatus status;
 
         private ITask task;
-        private Func<ITaskViewModel> taskFactory;
-        private Func<INoteViewModel> noteFactory;
+        private Func<IContentManager, ITaskViewModel> taskFactory;
+        private Func<IContentManager, INoteViewModel> noteFactory;
         private ITaskViewModel selectedTask;
         private INoteViewModel selectedNote;
+        private IContentManager contentManager;
 
         public string Name
         {
@@ -84,9 +85,16 @@ namespace Jsc.TaskManager.ViewModels
         public DelegateCommand AddNote { get; }
         public DelegateCommand RemoveNote { get; }
 
-        public TaskViewModel(ITask task, Func<ITask, ITaskViewModel> existingTaskFactory, Func<ITaskViewModel> newTaskFactory, Func<INote, INoteViewModel> existingNoteFactory, Func<INoteViewModel> newNoteFactory)
+        public TaskViewModel(
+            ITask task,
+            IContentManager contentManager,
+            Func<IContentManager, ITask, ITaskViewModel> existingTaskFactory, 
+            Func<IContentManager, ITaskViewModel> newTaskFactory, 
+            Func<IContentManager, INote, INoteViewModel> existingNoteFactory, 
+            Func<IContentManager, INoteViewModel> newNoteFactory)
         {
             this.task = task;
+            this.contentManager = contentManager;
             Name = task.Name;
             Description = task.Description;
             DueDate = task.DueDate;
@@ -103,12 +111,12 @@ namespace Jsc.TaskManager.ViewModels
 
             foreach (var child in task.Children)
             {
-                Children.Add(existingTaskFactory(child));
+                Children.Add(existingTaskFactory(contentManager, child));
             }
 
             foreach (var note in task.Notes)
             {
-                Notes.Add(existingNoteFactory(note));
+                Notes.Add(existingNoteFactory(contentManager, note));
             }
         }
 
@@ -127,7 +135,7 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoAddNote()
         {
-            var newNote = noteFactory();
+            var newNote = noteFactory(contentManager);
             ExecuteCommand(new UndoCommand(
                 () => Notes.Add(newNote),
                 () => Notes.Remove(newNote)));
@@ -148,7 +156,7 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoAddChild()
         {
-            var newTask = taskFactory();
+            var newTask = taskFactory(contentManager);
             newTask.Name = Children.GetUniqueName("Task");
         }
     }

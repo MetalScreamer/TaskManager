@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="Jsc.TaskManager.JobView"
+﻿<UserControl x:Class="Jsc.TaskManager.TaskView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
              xmlns:local="clr-namespace:Jsc.TaskManager"
              mc:Ignorable="d" 
@@ -21,7 +21,7 @@
         </Grid.ColumnDefinitions>
         <Border BorderThickness="0,0,0,1" BorderBrush="Black" Grid.ColumnSpan="2" Padding="0,0,0,15">
             <StackPanel Orientation="Horizontal">
-                <TextBlock Text="Job:" Style="{StaticResource HeaderTitle}" />
+                <TextBlock Text="Task:" Style="{StaticResource HeaderTitle}" />
                 <TextBlock Text="{Binding Name}" Style="{StaticResource HeaderSubTitle}" />
             </StackPanel>
         </Border>
@@ -80,9 +80,6 @@
                     SelectedItem="{Binding SelectedTask}"
                     CanUserAddRows="False" 
                     CanUserDeleteRows="False">
-                    <DataGrid.ContextMenu>
-                        <ContextMenu ItemsSource="{Binding TasksContextMenu}" />
-                    </DataGrid.ContextMenu>
                     <DataGrid.Columns>
                         <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
                         <DataGridTextColumn Binding="{Binding DueDate}" Header="Due Date" />

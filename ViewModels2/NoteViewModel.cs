@@ -18,6 +18,9 @@ namespace Jsc.TaskManager.ViewModels
     {
         private string text;
         private DateTime date;
+        private string displayDate;
+        private string displayTime;
+        private IContentManager contentManager;
 
         public string Text
         {
@@ -28,13 +31,56 @@ namespace Jsc.TaskManager.ViewModels
         public DateTime DateTime
         {
             get { return date; }
-            set { SetProperty(ref date, value, v => date = v); }
+            set
+            {
+                SetProperty(ref date, value, v => date = v);
+                SetDisplayDateAndTime();
+            }            
         }
 
-        public NoteViewModel(INote note)
+        public string DisplayDate
         {
-            this.Text = note.Text;
-            this.DateTime = note.DateTime;
+            get { return displayDate; }
+            private set { SetProperty(ref displayDate, value); }
+        }
+
+        public string DisplayTime
+        {
+            get { return displayTime; }
+            private set { SetProperty(ref displayTime, value); }
+        }
+
+        public string DisplayDateAndTime { get; private set; }
+
+        public DelegateCommand OkCommand { get; }
+        public DelegateCommand CancelCommand { get; }
+
+        public NoteViewModel(IContentManager contentManager, INote note)
+        {
+            Text = note.Text;
+            DateTime = note.DateTime;
+            this.contentManager = contentManager;
+
+            OkCommand = new DelegateCommand(_ => DoOk());
+            CancelCommand = new DelegateCommand(_ => DoCancel());
+        }
+
+        private void DoCancel()
+        {
+            contentManager.Unload(this);
+        }
+
+        private void DoOk()
+        {
+            contentManager.Unload(this);
+        }
+
+        private void SetDisplayDateAndTime()
+        {
+            DisplayDate = DateTime.ToString("MM/dd/yyyy");
+            DisplayTime = DateTime.ToString("hh:mm:ss tt");
+            DisplayDateAndTime = $"{DisplayDate} {DisplayTime}";
+            RaisePropertyChanged(nameof(DisplayDateAndTime));
         }
     }
 }
