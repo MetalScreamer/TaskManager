@@ -6,25 +6,16 @@
              xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
              xmlns:local="clr-namespace:Jsc.TaskManager"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <UserControl.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Width" Value="75" />
-            <Setter Property="Height" Value="23" />
-            <Setter Property="Margin" Value="2.5" />
-        </Style>
-    </UserControl.Resources>
+             d:DesignHeight="300" d:DesignWidth="300">    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-
         <StackPanel Orientation="Horizontal">
             <Button Content="Add Job" Command="{wpf:CommandBinding AddJob}" />
             <Button Content="Remove Job" Command="{wpf:CommandBinding RemoveJob}" />
-        </StackPanel>
-        
+        </StackPanel>        
         <DataGrid Grid.Row="1" 
                   Margin="2.5" 
                   Padding="2.5" 

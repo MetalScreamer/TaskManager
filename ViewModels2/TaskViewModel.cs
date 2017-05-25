@@ -16,7 +16,15 @@ namespace Jsc.TaskManager.ViewModels
         TaskStatus Status { get; set; }
 
         ObservableCollection<INoteViewModel> Notes { get; }
-        ObservableCollection<ITaskViewModel> Children { get; }
+        ObservableCollection<ITaskViewModel> Tasks { get; }
+
+        INoteViewModel SelectedNote { get; set; }
+        DelegateCommand AddNote { get; }
+        DelegateCommand RemoveNote { get; }
+
+        ITaskViewModel SelectedTask { get; set; }
+        DelegateCommand AddTask { get; }
+        DelegateCommand RemoveTask { get; }
     }
 
     public class TaskViewModel : UndoableViewModel, ITaskViewModel
@@ -73,18 +81,22 @@ namespace Jsc.TaskManager.ViewModels
         public INoteViewModel SelectedNote
         {
             get { return selectedNote; }
-            set { SetProperty(ref selectedNote, value, v => selectedNote = v); }
+            set
+            {
+                SetProperty(ref selectedNote, value, v => selectedNote = v);
+                RemoveNote.RaiseCanExecuteChanged();
+            }
         }
 
         public ObservableCollection<INoteViewModel> Notes { get; } = new ObservableCollection<INoteViewModel>();
-        public ObservableCollection<ITaskViewModel> Children { get; } = new ObservableCollection<ITaskViewModel>();
+        public ObservableCollection<ITaskViewModel> Tasks { get; } = new ObservableCollection<ITaskViewModel>();
 
-        public DelegateCommand AddChild { get; }
-        public DelegateCommand RemoveChild { get; }
+        public DelegateCommand AddTask { get; }
+        public DelegateCommand RemoveTask { get; }
 
         public DelegateCommand AddNote { get; }
         public DelegateCommand RemoveNote { get; }
-
+               
         public TaskViewModel(
             ITask task,
             IContentManager contentManager,
@@ -103,15 +115,15 @@ namespace Jsc.TaskManager.ViewModels
             taskFactory = newTaskFactory;
             noteFactory = newNoteFactory;
 
-            AddChild = new DelegateCommand(_ => DoAddChild());
-            RemoveChild = new DelegateCommand(_ => DoRemoveChild(), _ => CanRemoveChild());
+            AddTask = new DelegateCommand(_ => DoAddTask());
+            RemoveTask = new DelegateCommand(_ => DoRemoveTask(), _ => CanRemoveTask());
 
             AddNote = new DelegateCommand(_ => DoAddNote());
             RemoveNote = new DelegateCommand(_ => DoRemoveNote(), _ => CanRemoveNote());
 
             foreach (var child in task.Children)
             {
-                Children.Add(existingTaskFactory(contentManager, child));
+                Tasks.Add(existingTaskFactory(contentManager, child));
             }
 
             foreach (var note in task.Notes)
@@ -141,23 +153,23 @@ namespace Jsc.TaskManager.ViewModels
                 () => Notes.Remove(newNote)));
         }
 
-        private bool CanRemoveChild()
+        private bool CanRemoveTask()
         {
             return SelectedTask != null;
         }
 
-        private void DoRemoveChild()
+        private void DoRemoveTask()
         {
             var selectedTask = SelectedTask;
             ExecuteCommand(new UndoCommand(
-                () => Children.Remove(selectedTask),
-                () => Children.Add(SelectedTask)));
+                () => Tasks.Remove(selectedTask),
+                () => Tasks.Add(SelectedTask)));
         }
 
-        private void DoAddChild()
+        private void DoAddTask()
         {
             var newTask = taskFactory(contentManager);
-            newTask.Name = Children.GetUniqueName("Task");
+            newTask.Name = Tasks.GetUniqueName("Task");
         }
     }
 }
