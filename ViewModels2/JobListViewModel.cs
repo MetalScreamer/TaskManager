@@ -11,13 +11,13 @@ namespace Jsc.TaskManager.ViewModels
 {
     public interface IJobListViewModel
     {
-        ObservableCollection<IJobViewModel> Jobs { get; }
-        DelegateCommand AddJob { get; }
-        DelegateCommand RemoveJob { get; }
+        IEnumerable<IJobViewModel> Jobs { get; }
+        ICommand AddJob { get; }
+        ICommand RemoveJob { get; }
         IJobViewModel SelectedJob { get; set; }
     }
 
-    public class JobListViewModel : ViewModelBase, IJobListViewModel, IContentPage
+    public class JobListViewModel : ViewModelBase, IJobListViewModel
     {
         private IContentManager contentManager;
         private IJobViewModel selectedJob;
@@ -49,19 +49,48 @@ namespace Jsc.TaskManager.ViewModels
             }
         }
 
-        public JobListViewModel(ITaskManagerDbContext db, IContentManager contentManager, Func<IContentManager, IJob, IJobViewModel> existingJobFactory, Func<IContentManager, IJobViewModel> newJobFactory)
+        IEnumerable<IJobViewModel> IJobListViewModel.Jobs
+        {
+            get { return Jobs; }
+        }
+
+        ICommand IJobListViewModel.AddJob
+        {
+            get { return AddJob; }
+        }
+
+        ICommand IJobListViewModel.RemoveJob
+        {
+            get { return RemoveJob; }
+        }
+
+        public JobListViewModel(
+            IContentManager contentManager,
+            IEnumerable<IJobViewModel> jobs, 
+            Func<IContentManager, IJobViewModel> newJobFactory,
+            IDataAccess<IJob> dataAccess)
         {
             this.contentManager = contentManager;
 
-            foreach (var job in db.Jobs)
+            foreach (var job in jobs)
             {
-                Jobs.Add(existingJobFactory(contentManager, job));
+                Jobs.Add(job);
             }
 
             JobListMenu.Add(new MenuItem() { Text = "Edit Job", Command = new DelegateCommand(_ => EditJob()) });
 
-            AddJob = new DelegateCommand(_ => DoAddJob(newJobFactory));
-            RemoveJob = new DelegateCommand(_ => Jobs.Remove(SelectedJob), _ => SelectedJob != null);
+            AddJob = new DelegateCommand(_ => DoAddJob(() => newJobFactory(contentManager)));
+            RemoveJob = new DelegateCommand(_ => DoRemoveJob(), _ => CanRemoveJob());
+        }
+
+        private bool CanRemoveJob()
+        {
+            return SelectedJob != null;
+        }
+
+        private void DoRemoveJob()
+        {
+            Jobs.Remove(SelectedJob); ;
         }
 
         private void EditJob()
@@ -69,16 +98,12 @@ namespace Jsc.TaskManager.ViewModels
             contentManager.Load(SelectedJob);
         }
 
-        private void DoAddJob(Func<IContentManager, IJobViewModel> jobFactory)
+        private void DoAddJob(Func<IJobViewModel> jobFactory)
         {
-            var job = jobFactory(contentManager);
+            var job = jobFactory();
             job.Name = Jobs.GetUniqueName("Job");
             Jobs.Add(job);
         }
-
-        void IContentPage.Loaded()
-        {
-            gridMenuVisible = true;
-        }
+        
     }
 }

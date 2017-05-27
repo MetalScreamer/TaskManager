@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.Models
 {
-    public interface ITaskManagerDbContext
-    {
-        IEnumerable<IJob> Jobs { get; }
-    }
+    //public interface ITaskManagerDbContext
+    //{
+    //    IEnumerable<IJob> Jobs { get; }
+    //}
 }

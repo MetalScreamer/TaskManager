@@ -12,6 +12,9 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
@@ -25,72 +28,17 @@
                 <TextBlock Text="{Binding Name}" Style="{StaticResource HeaderSubTitle}" />
             </StackPanel>
         </Border>
-        <TextBlock Text="Task Name:" HorizontalAlignment="Right" Margin="15,15,5,5" Grid.Row="1" />
+        <TextBlock Text="Name:" HorizontalAlignment="Right" Margin="15,15,5,5" Grid.Row="1" />
         <TextBox Text="{Binding Name}" Margin="5,15,5,5" Width="350" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Left" />
-        <TextBlock Text="Task Description:" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="2" />
+        <TextBlock Text="Description:" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="2" />
         <TextBox Text="{Binding Description}" Margin="5" Height="70" AcceptsReturn="True" Grid.Column="1" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
-        <GroupBox Header="Notes" Margin="5" Grid.Row="3" Grid.ColumnSpan="2" Padding="2.5">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Add Note" Command="{wpf:CommandBinding AddNote}" />
-                    <Button Content="Remove Note" Command="{wpf:CommandBinding RemoveNote}" />
-                </StackPanel>
-                <DataGrid 
-                    Grid.Row="1" 
-                    Margin="2.5" 
-                    IsReadOnly="True" 
-                    AutoGenerateColumns="False" 
-                    ItemsSource="{Binding Notes}" 
-                    SelectedItem="{Binding SelectedNote}"
-                    CanUserAddRows="False" 
-                    CanUserDeleteRows="False"
-                    RowHeight="25"
-                    HeadersVisibility="Column"
-                    >
-                    <DataGrid.ContextMenu>
-                        <ContextMenu ItemsSource="{Binding NotesContextMenu}" />
-                    </DataGrid.ContextMenu>
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding DisplayDate}" Header="Date" />
-                        <DataGridTextColumn Binding="{Binding DisplayTime}" Header="Time" />
-                        <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </GroupBox>
-        <GroupBox Header="Tasks" Margin="5" Grid.Row="4" Grid.ColumnSpan="2">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <StackPanel Orientation="Horizontal">
-                    <Button Content="Add Task" Command="{wpf:CommandBinding AddTask}" />
-                    <Button Content="Remove Task" Command="{wpf:CommandBinding RemoveTask}" />
-                </StackPanel>
-                <DataGrid 
-                    Grid.Row="1" 
-                    Margin="2.5" 
-                    IsReadOnly="True" 
-                    AutoGenerateColumns="False" 
-                    ItemsSource="{Binding Tasks}" 
-                    SelectedItem="{Binding SelectedTask}"
-                    CanUserAddRows="False" 
-                    CanUserDeleteRows="False"
-                    HeadersVisibility="Column"
-                    >
-                    <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{Binding Name}" Header="Name" />
-                        <DataGridTextColumn Binding="{Binding DueDate}" Header="Due Date" />
-                        <DataGridTextColumn Binding="{Binding Priority}" Header="Priority"  />
-                        <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="*" />
-                    </DataGrid.Columns>
-                </DataGrid>
-            </Grid>
-        </GroupBox>
+        <TextBlock Text="Due Date::" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="3" />
+        <DatePicker SelectedDate="{Binding DueDate}" Margin="5" Width="150" HorizontalAlignment="Left" Grid.Column="1" Grid.Row="3" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+        <TextBlock Text="Priority:" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="4" />
+        <TextBox Text="{Binding Priority}" Margin="5" Grid.Column="1" Grid.Row="4" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+        <TextBlock Text="Status:" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="5" />
+        <TextBox Text="{Binding Status}" Margin="5" Grid.Column="1" Grid.Row="5" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
+        <local:NoteListView Grid.Row="6" Grid.ColumnSpan="2" DataContext="{Binding Notes}" />
+        <local:TaskListView Grid.Row="7" Grid.ColumnSpan="2" DataContext="{Binding Tasks}" />
     </Grid>
 </UserControl>

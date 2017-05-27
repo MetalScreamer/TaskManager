@@ -61,6 +61,10 @@
       <Project>{D46CC1E9-005D-42F9-8EEE-E37E32256323}</Project>
       <Name>Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MvvmUtilities\MvvmUtilities.csproj">
+      <Project>{4473A485-EF39-4590-A030-0E2F2C0C970A}</Project>
+      <Name>MvvmUtilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

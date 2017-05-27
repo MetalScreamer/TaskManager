@@ -50,8 +50,10 @@
     <Compile Include="JobListViewModel.cs" />
     <Compile Include="JobViewModel.cs" />
     <Compile Include="MainWindowViewModel.cs" />
+    <Compile Include="NoteListViewModel.cs" />
     <Compile Include="NoteViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TaskListViewModel.cs" />
     <Compile Include="TaskViewModel.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

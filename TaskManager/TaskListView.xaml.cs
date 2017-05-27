@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace Jsc.TaskManager
 {
     /// <summary>
-    /// Interaction logic for NoteListView.xaml
+    /// Interaction logic for TaskList.xaml
     /// </summary>
-    public partial class NoteListView : UserControl
+    public partial class TaskListView : UserControl
     {
-        public NoteListView()
+        public TaskListView()
         {
             InitializeComponent();
             dataGrid.DisableOffRowContextMenu();

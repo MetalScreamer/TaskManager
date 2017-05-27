@@ -6,7 +6,7 @@
              xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
              xmlns:local="clr-namespace:Jsc.TaskManager"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">    
+             d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
@@ -15,22 +15,25 @@
         <StackPanel Orientation="Horizontal">
             <Button Content="Add Job" Command="{wpf:CommandBinding AddJob}" />
             <Button Content="Remove Job" Command="{wpf:CommandBinding RemoveJob}" />
-        </StackPanel>        
-        <DataGrid Grid.Row="1" 
-                  Margin="2.5" 
-                  Padding="2.5" 
-                  AutoGenerateColumns="False" 
-                  ItemsSource="{Binding Jobs}" 
-                  IsReadOnly="True" 
-                  HeadersVisibility="Column" 
-                  CanUserAddRows="False" 
-                  CanUserDeleteRows="False"
-                  SelectedItem="{Binding SelectedJob}"
-                  RowHeight="23"
-                  MouseDown="DataGrid_MouseDown" 
-                  MouseRightButtonDown="DataGrid_MouseRightButtonDown">
+        </StackPanel>
+        <DataGrid 
+            x:Name="dataGrid"
+            Grid.Row="1"
+            Margin="2.5" 
+            Padding="2.5" 
+            AutoGenerateColumns="False" 
+            ItemsSource="{Binding Jobs}" 
+            IsReadOnly="True" 
+            HeadersVisibility="Column" 
+            CanUserAddRows="False" 
+            CanUserDeleteRows="False"
+            SelectedItem="{Binding SelectedJob}"
+            RowHeight="23"
+            MouseDown="DataGrid_MouseDown" 
+            MouseRightButtonDown="DataGrid_MouseRightButtonDown"
+            >
             <DataGrid.ContextMenu>
-                <ContextMenu ItemsSource="{Binding JobListMenu}" IsOpen="{Binding GridMenuVisible}" />                  
+                <ContextMenu ItemsSource="{Binding JobListMenu}" />
             </DataGrid.ContextMenu>
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />

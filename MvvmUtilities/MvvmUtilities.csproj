@@ -40,6 +40,7 @@
     <Compile Include="DelegateCommand.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="ICommand.cs" />
+    <Compile Include="IDataAccess.cs" />
     <Compile Include="IHasName.cs" />
     <Compile Include="MenuItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

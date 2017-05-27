@@ -10,6 +10,7 @@ namespace Jsc.TaskManager.ViewModels
 {
     public interface INoteViewModel
     {
+        INote Note { get; }
         string Text { get; set; }
         DateTime DateTime { get; set; }
     }
@@ -21,6 +22,8 @@ namespace Jsc.TaskManager.ViewModels
         private string displayDate;
         private string displayTime;
         private IContentManager contentManager;
+
+        public INote Note { get; }
 
         public string Text
         {
@@ -57,6 +60,8 @@ namespace Jsc.TaskManager.ViewModels
 
         public NoteViewModel(IContentManager contentManager, INote note)
         {
+            Note = note;
+
             Text = note.Text;
             DateTime = note.DateTime;
             this.contentManager = contentManager;

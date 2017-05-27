@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Jsc.Wpf;
 
 namespace Jsc.TaskManager
 {
@@ -23,6 +24,8 @@ namespace Jsc.TaskManager
         public JobListView()
         {
             InitializeComponent();
+
+            dataGrid.DisableOffRowContextMenu();
         }
 
         private void DataGrid_MouseDown(object sender, MouseButtonEventArgs e)
