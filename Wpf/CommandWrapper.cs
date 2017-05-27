@@ -16,10 +16,13 @@ namespace Jsc.Wpf
 
         public CommandWrapper(Jsc.MvvmUtilities.ICommand command)
         {
-            this.execute = command.Execute;
-            this.canExecute = command.CanExecute;
+            if (command != null)
+            {
+                this.execute = command.Execute;
+                this.canExecute = command.CanExecute;
 
-            command.CanExecuteChanged += Command_CanExecuteChanged;            
+                command.CanExecuteChanged += Command_CanExecuteChanged;
+            }
         }
 
         private void Command_CanExecuteChanged(object sender, EventArgs e)
@@ -29,12 +32,12 @@ namespace Jsc.Wpf
 
         public bool CanExecute(object parameter)
         {
-            return canExecute(parameter);
+            return canExecute?.Invoke(parameter) ?? true;
         }
 
         public void Execute(object parameter)
         {
-            execute(parameter);
+            execute?.Invoke(parameter);
         }
     }
 }

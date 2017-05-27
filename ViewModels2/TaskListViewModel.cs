@@ -14,6 +14,7 @@ namespace Jsc.TaskManager.ViewModels
         ITaskViewModel Selected { get; set; }
         ICommand Add { get; }
         ICommand Remove { get; }
+        ICommand EditTask { get; }
         IEnumerable<MenuItem> ContextMenu { get; }
     }
 
@@ -42,6 +43,7 @@ namespace Jsc.TaskManager.ViewModels
 
         public DelegateCommand Add { get; }
         public DelegateCommand Remove { get; }
+        public DelegateCommand EditTask { get; }
 
         public ObservableCollection<MenuItem> ContextMenu { get; } = new ObservableCollection<MenuItem>();
 
@@ -65,6 +67,11 @@ namespace Jsc.TaskManager.ViewModels
             get { return Remove; }
         }
 
+        ICommand ITaskListViewModel.EditTask
+        {
+            get { return EditTask; }
+        }
+
         public TaskListViewModel(
             IContentManager contentManager,
             IEnumerable<ITaskViewModel> initialTasks,
@@ -72,13 +79,19 @@ namespace Jsc.TaskManager.ViewModels
         {
             Add = new DelegateCommand(_ => DoAddTask(() => taskFactory(contentManager)));
             Remove= new DelegateCommand(_ => DoRemoveTask(), _ => CanRemoveTask());
+            EditTask = new DelegateCommand(_ => DoEditTask(contentManager));
 
             ContextMenu.Add(
                 new MenuItem()
                 {
                     Text = "Edit Task",
-                    Command = new DelegateCommand(_ => contentManager.Load(Selected))
+                    Command = EditTask
                 });
+        }
+
+        private void DoEditTask(IContentManager contentManager)
+        {
+            contentManager.Load(Selected);
         }
 
         private bool CanRemoveTask()

@@ -14,6 +14,7 @@ namespace Jsc.TaskManager.ViewModels
         IEnumerable<INoteViewModel> Notes { get; }
         ICommand Add { get; }
         ICommand Remove { get; }
+        ICommand EditNote { get; }
         IEnumerable<MenuItem> ContextMenu { get; }
     }
 
@@ -28,6 +29,7 @@ namespace Jsc.TaskManager.ViewModels
 
         public DelegateCommand Add { get; }
         public DelegateCommand Remove { get; }
+        public DelegateCommand EditNote { get; }
 
         public INoteViewModel Selected
         {
@@ -59,6 +61,11 @@ namespace Jsc.TaskManager.ViewModels
             get { return ContextMenu; }
         }
 
+        ICommand INoteListViewModel.EditNote
+        {
+            get { return EditNote; }
+        }
+
         public NoteListViewModel(
             IContentManager contentManager,
             IEnumerable<INoteViewModel> initialNotes,
@@ -69,11 +76,12 @@ namespace Jsc.TaskManager.ViewModels
 
             Add = new DelegateCommand(_ => AddNote(() => noteFactory(contentManager)));
             Remove = new DelegateCommand(_ => RemoveNote(), _ => CanRemoveNote());
+            EditNote = new DelegateCommand(_ => DoEditNote(contentManager));
 
-            ContextMenu.Add(new MenuItem() { Text = "Edit Note", Command = new DelegateCommand(_ => EditNote(contentManager)) });
+            ContextMenu.Add(new MenuItem() { Text = "Edit Note", Command = EditNote });
         }
 
-        private void EditNote(IContentManager contentManager)
+        private void DoEditNote(IContentManager contentManager)
         {
             contentManager.Load(Selected);
         }

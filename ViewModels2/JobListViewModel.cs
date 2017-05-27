@@ -15,11 +15,12 @@ namespace Jsc.TaskManager.ViewModels
         ICommand AddJob { get; }
         ICommand RemoveJob { get; }
         IJobViewModel SelectedJob { get; set; }
+        ICommand EditJob { get; }
     }
 
     public class JobListViewModel : ViewModelBase, IJobListViewModel
     {
-        private IContentManager contentManager;
+        //private IContentManager contentManager;
         private IJobViewModel selectedJob;
         private bool gridMenuVisible = true;
 
@@ -39,16 +40,6 @@ namespace Jsc.TaskManager.ViewModels
             }
         }
 
-        public bool GridMenuVisible
-        {
-            get { return gridMenuVisible; }
-            set
-            {
-                if (value && SelectedJob == null) value = false;
-                SetProperty(ref gridMenuVisible, value);
-            }
-        }
-
         IEnumerable<IJobViewModel> IJobListViewModel.Jobs
         {
             get { return Jobs; }
@@ -64,23 +55,34 @@ namespace Jsc.TaskManager.ViewModels
             get { return RemoveJob; }
         }
 
+        public DelegateCommand EditJob { get; }
+
+        ICommand IJobListViewModel.EditJob
+        {
+            get { return EditJob; }
+        }
+
         public JobListViewModel(
             IContentManager contentManager,
             IEnumerable<IJobViewModel> jobs, 
             Func<IContentManager, IJobViewModel> newJobFactory,
             IDataAccess<IJob> dataAccess)
         {
-            this.contentManager = contentManager;
-
             foreach (var job in jobs)
             {
                 Jobs.Add(job);
             }
 
-            JobListMenu.Add(new MenuItem() { Text = "Edit Job", Command = new DelegateCommand(_ => EditJob()) });
-
             AddJob = new DelegateCommand(_ => DoAddJob(() => newJobFactory(contentManager)));
             RemoveJob = new DelegateCommand(_ => DoRemoveJob(), _ => CanRemoveJob());
+            EditJob = new DelegateCommand(_ => DoEditJob(contentManager));
+
+            JobListMenu.Add(new MenuItem() { Text = "Edit Job", Command = EditJob });
+        }
+
+        private void DoEditJob(IContentManager contentManager)
+        {
+            contentManager.Load(SelectedJob);
         }
 
         private bool CanRemoveJob()
@@ -91,11 +93,6 @@ namespace Jsc.TaskManager.ViewModels
         private void DoRemoveJob()
         {
             Jobs.Remove(SelectedJob); ;
-        }
-
-        private void EditJob()
-        {
-            contentManager.Load(SelectedJob);
         }
 
         private void DoAddJob(Func<IJobViewModel> jobFactory)

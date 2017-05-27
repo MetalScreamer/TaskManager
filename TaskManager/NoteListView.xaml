@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              xmlns:wpf="clr-namespace:Jsc.Wpf;assembly=Jsc.Wpf"
              xmlns:local="clr-namespace:Jsc.TaskManager"
              mc:Ignorable="d" 
@@ -29,7 +30,13 @@
                     CanUserDeleteRows="False"
                     RowHeight="25"
                     HeadersVisibility="Column"
+                    MouseDoubleClick="dataGrid_MouseDoubleClick"
                     >
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <i:InvokeCommandAction Command="{wpf:CommandBinding EditNote}" />
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
                 <DataGrid.ContextMenu>
                     <ContextMenu ItemsSource="{Binding ContextMenu}" />
                 </DataGrid.ContextMenu>

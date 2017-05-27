@@ -57,5 +57,12 @@ namespace Jsc.TaskManager
 
             return dependencyObject as DataGridCell;
         }
+
+        private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            var cell = GetCell(e);
+
+            if (cell == null) e.Handled = true;
+        }
     }
 }

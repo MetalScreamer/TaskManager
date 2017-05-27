@@ -14,6 +14,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -30,6 +31,10 @@
         <TextBlock Text="Job Description:" Margin="15,5,5,5" HorizontalAlignment="Right" Grid.Row="2" />
         <TextBox Text="{Binding Description}" Margin="5" Height="70" AcceptsReturn="True" Grid.Column="1" Grid.Row="2" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
         <local:NoteListView Grid.Row="3" Grid.ColumnSpan="2" DataContext="{Binding Notes}" />
-        <local:TaskListView Grid.Row="4" Grid.ColumnSpan="2" DataContext="{Binding Tasks}" />        
+        <local:TaskListView Grid.Row="4" Grid.ColumnSpan="2" DataContext="{Binding Tasks}" />
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Grid.ColumnSpan="2" FlowDirection="RightToLeft">
+            <Button Content="Cancel" Command="{wpf:CommandBinding CancelCommand}" />
+            <Button Content="OK" Command="{wpf:CommandBinding OkCommand}" />
+        </StackPanel>
     </Grid>
 </UserControl>
