@@ -18,20 +18,22 @@
                 <Button Content="Add Note" Command="{wpf:CommandBinding Add}" />
                 <Button Content="Remove Note" Command="{wpf:CommandBinding Remove}" />
             </StackPanel>
-            <DataGrid 
-                    x:Name="dataGrid"
-                    Grid.Row="1" 
-                    Margin="2.5" 
-                    IsReadOnly="True" 
-                    AutoGenerateColumns="False" 
-                    ItemsSource="{Binding Notes}" 
-                    SelectedItem="{Binding Selected}"
-                    CanUserAddRows="False" 
-                    CanUserDeleteRows="False"
-                    RowHeight="25"
-                    HeadersVisibility="Column"
-                    MouseDoubleClick="dataGrid_MouseDoubleClick"
-                    >
+            <wpf:DataGrid 
+                x:Name="dataGrid"
+                Grid.Row="1" 
+                Margin="2.5" 
+                IsReadOnly="True" 
+                AutoGenerateColumns="False" 
+                ItemsSource="{Binding Notes}" 
+                SelectedItem="{Binding Selected}"
+                CanUserAddRows="False" 
+                CanUserDeleteRows="False"
+                RowHeight="25"
+                HeadersVisibility="Column"
+                DisableOffRowContextMenu="True"
+                DeselectWhenClickOffRow="True"
+                DisableOffRowDoubleClick="True"
+                >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
                         <i:InvokeCommandAction Command="{wpf:CommandBinding EditNote}" />
@@ -45,7 +47,7 @@
                     <DataGridTextColumn Binding="{Binding DisplayTime}" Header="Time" />
                     <DataGridTextColumn Binding="{Binding Text}" Header="Note" Width="*" />
                 </DataGrid.Columns>
-            </DataGrid>
+            </wpf:DataGrid>
         </Grid>
     </GroupBox>
 </UserControl>

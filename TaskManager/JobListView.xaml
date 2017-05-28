@@ -17,7 +17,7 @@
             <Button Content="Add Job" Command="{wpf:CommandBinding AddJob}" />
             <Button Content="Remove Job" Command="{wpf:CommandBinding RemoveJob}" />
         </StackPanel>
-        <DataGrid 
+        <wpf:DataGrid 
             x:Name="dataGrid"
             Grid.Row="1"
             Margin="2.5" 
@@ -29,10 +29,10 @@
             CanUserAddRows="False" 
             CanUserDeleteRows="False"
             SelectedItem="{Binding SelectedJob}"
-            RowHeight="23"
-            MouseDown="DataGrid_MouseDown" 
-            MouseRightButtonDown="DataGrid_MouseRightButtonDown"
-            MouseDoubleClick="dataGrid_MouseDoubleClick"    
+            RowHeight="23"            
+            DisableOffRowContextMenu="True"
+            DeselectWhenClickOffRow="True"
+            DisableOffRowDoubleClick="True"
             >
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
@@ -46,6 +46,6 @@
                 <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*" />
                 <DataGridTextColumn Header="Description" Binding="{Binding Description}" Width="3*" />
             </DataGrid.Columns>
-        </DataGrid>
+        </wpf:DataGrid>
     </Grid>
 </UserControl>

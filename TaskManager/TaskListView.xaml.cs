@@ -24,7 +24,7 @@ namespace Jsc.TaskManager
         public TaskListView()
         {
             InitializeComponent();
-            dataGrid.DisableOffRowContextMenu();
+            //dataGrid.DisableOffRowContextMenu();
         }
 
         private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)

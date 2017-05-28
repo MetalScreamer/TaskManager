@@ -49,7 +49,7 @@
     <Compile Include="CommandConverter.cs" />
     <Compile Include="CommandWrapper.cs" />
     <Compile Include="ConverterBase.cs" />
-    <Compile Include="Extensions.cs" />
+    <Compile Include="DataGrid.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

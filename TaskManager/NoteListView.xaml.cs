@@ -24,22 +24,6 @@ namespace Jsc.TaskManager
         public NoteListView()
         {
             InitializeComponent();
-            dataGrid.DisableOffRowContextMenu();
-        }
-
-        private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var dependencyObject = e.OriginalSource as DependencyObject;
-
-            while (dependencyObject != null && dependencyObject.GetType() != typeof(DataGridCell))
-            {
-                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-            }
-
-            if (dependencyObject == null)
-            {
-                e.Handled = true;
-            }
         }
     }
 }

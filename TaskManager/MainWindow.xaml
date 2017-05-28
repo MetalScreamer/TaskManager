@@ -7,10 +7,10 @@
         xmlns:vm="clr-namespace:Jsc.TaskManager.ViewModels;assembly=Jsc.TaskManager.ViewModels"
         xmlns:local="clr-namespace:Jsc.TaskManager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
-    <Window.Resources>
-        
-    </Window.Resources>
+        Title="MainWindow" 
+        Height="350" 
+        Width="525"
+        WindowState="Maximized">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

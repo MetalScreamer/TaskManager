@@ -18,7 +18,7 @@
                 <Button Content="Add Task" Command="{wpf:CommandBinding Add}" />
                 <Button Content="Remove Task" Command="{wpf:CommandBinding Remove}" />
             </StackPanel>
-            <DataGrid
+            <wpf:DataGrid
                 x:Name="dataGrid"
                 Grid.Row="1" 
                 Margin="2.5" 
@@ -30,6 +30,9 @@
                 CanUserDeleteRows="False"
                 HeadersVisibility="Column"
                 MouseDoubleClick="dataGrid_MouseDoubleClick"
+                DisableOffRowContextMenu="True"
+                DisableOffRowDoubleClick="True"
+                DeselectWhenClickOffRow="True"
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">
@@ -45,7 +48,7 @@
                     <DataGridTextColumn Binding="{Binding Priority}" Header="Priority"  />
                     <DataGridTextColumn Binding="{Binding Status}" Header="Status" Width="*" />
                 </DataGrid.Columns>
-            </DataGrid>
+            </wpf:DataGrid>
         </Grid>
     </GroupBox>
 </UserControl>

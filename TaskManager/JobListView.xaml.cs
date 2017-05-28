@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Jsc.Wpf;
+//using Jsc.Wpf;
 
 namespace Jsc.TaskManager
 {
@@ -24,45 +24,6 @@ namespace Jsc.TaskManager
         public JobListView()
         {
             InitializeComponent();
-
-            dataGrid.DisableOffRowContextMenu();
-        }
-
-        private void DataGrid_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            var cell = GetCell(e);
-
-            if (cell == null)
-            {
-                var dataGrid = (sender as DataGrid);
-                dataGrid.SelectedItem = null;
-            }
-        }
-
-        private void DataGrid_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            var cell = GetCell(e);
-
-            if (cell != null)
-            {
-                (sender as DataGrid).SelectedItem = cell.DataContext;
-            }
-        }
-
-        private static DataGridCell GetCell(MouseButtonEventArgs e)
-        {
-            var dependencyObject = e.OriginalSource as DependencyObject;
-            while (dependencyObject != null && dependencyObject.GetType() != typeof(DataGridCell))
-                dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-
-            return dependencyObject as DataGridCell;
-        }
-
-        private void dataGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            var cell = GetCell(e);
-
-            if (cell == null) e.Handled = true;
         }
     }
 }
