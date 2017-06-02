@@ -24,39 +24,33 @@ namespace Jsc.TaskManager.Models
         public long JobId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<Task> Tasks { get; } = new List<Task>();
-        public List<Note> Notes { get; } = new List<Note>();
+        public virtual List<Task> Tasks { get; } = new List<Task>();
+        public virtual List<Note> Notes { get; } = new List<Note>();
 
         IEnumerable<ITask> IJob.Tasks
         {
-            get
-            {
-                //dont return list and give clients a hack
-                return Tasks.OfType<ITask>();
-            }
+            get { return Tasks; }
         }
 
         IEnumerable<INote> IJob.Notes
         {
-            get
-            {
-                //dont return list and give clients a hack
-                return Notes.OfType<INote>();
-            }
+            get { return Notes; }
         }
 
-        public void AddTask(ITask task)
+        void IJob.AddTask(ITask task)
         {
+            task.ParentJob = this;
             Tasks.Add((Task)task);
         }
 
-        public void RemoveTask(ITask task)
+        void IJob.RemoveTask(ITask task)
         {
             Tasks.Remove((Task)task);
         }
 
-        public void AddNote(INote note)
+        void IJob.AddNote(INote note)
         {
+            note.ParentJob = this;
             Notes.Add((Note)note);
         }
 

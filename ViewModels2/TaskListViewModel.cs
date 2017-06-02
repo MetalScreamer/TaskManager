@@ -16,12 +16,15 @@ namespace Jsc.TaskManager.ViewModels
         ICommand Remove { get; }
         ICommand EditTask { get; }
         IEnumerable<MenuItem> ContextMenu { get; }
+        Action<ITaskViewModel> TaskAddedCallback { get; set; }
     }
 
     public class TaskListViewModel : ViewModelBase, ITaskListViewModel
     {
         private string name;
         private ITaskViewModel selectedTask;
+        private IContentManager contentManager;
+        private Action<ITaskViewModel> taskAddedCallback;
 
         public string Name
         {
@@ -72,14 +75,27 @@ namespace Jsc.TaskManager.ViewModels
             get { return EditTask; }
         }
 
+        public Action<ITaskViewModel> TaskAddedCallback
+        {
+            get { return taskAddedCallback; }
+            set { taskAddedCallback = value; }
+        }
+
         public TaskListViewModel(
             IContentManager contentManager,
             IEnumerable<ITaskViewModel> initialTasks,
             Func<IContentManager, ITaskViewModel> taskFactory)
         {
+            this.contentManager = contentManager;
+
+            foreach (var task in initialTasks)
+            {
+                Tasks.Add(task);
+            }
+
             Add = new DelegateCommand(_ => DoAddTask(() => taskFactory(contentManager)));
             Remove= new DelegateCommand(_ => DoRemoveTask(), _ => CanRemoveTask());
-            EditTask = new DelegateCommand(_ => DoEditTask(contentManager));
+            EditTask = new DelegateCommand(_ => DoEditTask());
 
             ContextMenu.Add(
                 new MenuItem()
@@ -89,7 +105,7 @@ namespace Jsc.TaskManager.ViewModels
                 });
         }
 
-        private void DoEditTask(IContentManager contentManager)
+        private void DoEditTask()
         {
             contentManager.Load(Selected);
         }
@@ -109,6 +125,9 @@ namespace Jsc.TaskManager.ViewModels
             var newTask = taskFactory();
             newTask.Name = Tasks.GetUniqueName("Task");
             Tasks.Add(newTask);
+            TaskAddedCallback?.Invoke(newTask);
+            //newTask.Save();            
+            //contentManager.Load(newTask);
         }
     }
 }

@@ -52,9 +52,11 @@ namespace Jsc.TaskManager
                 .RegisterType<ITaskViewModel, TaskViewModel>()
                 .RegisterType<INoteListViewModel, NoteListViewModel>()
                 .RegisterType<INoteViewModel, NoteViewModel>()
+                //Create an instance of the dal
                 .RegisterInstance(new TaskManagerDbContext())
                 .RegisterInstance<IDataAccess<IJob>>(container.Resolve<TaskManagerDbContext>())
-                //.RegisterInstance<Func<IContentManager, IJob, IJobViewModel>>((cm, j) => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("job", j)))
+                .RegisterInstance<IDataAccess<ITask>>(container.Resolve<TaskManagerDbContext>())
+                .RegisterInstance<IDataAccess<INote>>(container.Resolve<TaskManagerDbContext>())
                 .RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
                 .RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))
                 .RegisterInstance<Func<IContentManager, ITaskViewModel>>(cm => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm)))
@@ -91,8 +93,7 @@ namespace Jsc.TaskManager
                         var tasks = jvm.Task.Children.Select(c => taskFactory(cm, c));
 
                         return container.Resolve<ITaskListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialTasks", tasks));
-                    })
-                ;
+                    });
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

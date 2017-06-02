@@ -19,6 +19,12 @@ namespace Jsc.TaskManager.ViewModels
 
         INoteListViewModel Notes { get; }
         ITaskListViewModel Tasks { get; }
+
+        ICommand OkCommand { get; }
+        ICommand CanceCommand { get; }
+
+        void Save();
+        void Remove();
     }
 
     public class TaskViewModel : UndoableViewModel, ITaskViewModel
@@ -28,6 +34,8 @@ namespace Jsc.TaskManager.ViewModels
         private DateTime dueDate;
         private TaskPriority priority;
         private TaskStatus status;
+        private IDataAccess<ITask> dal;
+        private IContentManager contentManager;      
 
         public ITask Task { get; }
 
@@ -64,22 +72,85 @@ namespace Jsc.TaskManager.ViewModels
         public INoteListViewModel Notes { get; }
         public ITaskListViewModel Tasks { get; }
 
+        public DelegateCommand OkCommad { get; }
+        public DelegateCommand CancelCommand { get; }
+
+        public ICommand OkCommand
+        {
+            get { return OkCommad; }
+        }
+
+        public ICommand CanceCommand
+        {
+            get { return CancelCommand; }
+        }
+
         public TaskViewModel(
             ITask task,
             IContentManager contentManager,
             Func<IContentManager, ITaskViewModel, INoteListViewModel> noteListFactory,
-            Func<IContentManager, ITaskViewModel, ITaskListViewModel> taskListFactory)
+            Func<IContentManager, ITaskViewModel, ITaskListViewModel> taskListFactory,
+            IDataAccess<ITask> dal)
         {
             this.Task = task;
+            this.dal = dal;
+            this.contentManager = contentManager;
 
             Tasks = taskListFactory(contentManager, this);
             Notes = noteListFactory(contentManager, this);
+            LoadFromTask(task);
 
+            Tasks.TaskAddedCallback = TaskAdded;
+
+            OkCommad = new DelegateCommand(_ => DoOk());
+            CancelCommand = new DelegateCommand(_ => DoCancel());
+        }
+
+        private void TaskAdded(ITaskViewModel taskVm)
+        {
+            Task.AddChild(taskVm.Task);
+        }
+
+        private void DoCancel()
+        {
+            LoadFromTask(Task);
+            contentManager.Unload(this);
+        }
+
+        private void DoOk()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            WriteToModel(Task);
+            dal.Save(Task);
+            dal.Commit();
+        }
+
+        public void Remove()
+        {
+            dal.Remove(Task);
+            dal.Commit();
+        }
+
+        private void LoadFromTask(ITask task)
+        {
             Name = task.Name;
             Description = task.Description;
             DueDate = task.DueDate;
             Priority = task.Priority;
             Status = task.Status;
+        }
+
+        private void WriteToModel(ITask task)
+        {
+            task.Name = Name;
+            task.Description = Description;
+            task.DueDate = DueDate;
+            task.Priority = Priority;
+            task.Status = Status;
         }
     }
 }

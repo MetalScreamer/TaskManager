@@ -23,7 +23,8 @@ namespace Jsc.TaskManager.ViewModels
         //private IContentManager contentManager;
         private IJobViewModel selectedJob;
         private bool gridMenuVisible = true;
-
+        private IContentManager contentManager;
+        
         public ObservableCollection<IJobViewModel> Jobs { get; } = new ObservableCollection<IJobViewModel>();
         public ObservableCollection<MenuItem> JobListMenu { get; } = new ObservableCollection<MenuItem>();
 
@@ -65,9 +66,10 @@ namespace Jsc.TaskManager.ViewModels
         public JobListViewModel(
             IContentManager contentManager,
             IEnumerable<IJobViewModel> jobs, 
-            Func<IContentManager, IJobViewModel> newJobFactory,
-            IDataAccess<IJob> dataAccess)
+            Func<IContentManager, IJobViewModel> newJobFactory)
         {
+            this.contentManager = contentManager;
+
             foreach (var job in jobs)
             {
                 Jobs.Add(job);
@@ -92,7 +94,10 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoRemoveJob()
         {
-            Jobs.Remove(SelectedJob); ;
+            var selectedJob = SelectedJob;
+
+            Jobs.Remove(selectedJob);
+            selectedJob.Remove();
         }
 
         private void DoAddJob(Func<IJobViewModel> jobFactory)
@@ -100,6 +105,9 @@ namespace Jsc.TaskManager.ViewModels
             var job = jobFactory();
             job.Name = Jobs.GetUniqueName("Job");
             Jobs.Add(job);
+            SelectedJob = job;
+            job.Save();
+            contentManager.Load(job);               
         }
         
     }

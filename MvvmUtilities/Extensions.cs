@@ -17,7 +17,7 @@ namespace Jsc.MvvmUtilities
             {
                 result = $"{baseName} {counter}";
                 counter++;
-            } while (me.Any(n => n.Name.Equals(result, StringComparison.OrdinalIgnoreCase)));
+            } while (me.Any(n => String.Equals(n.Name, result, StringComparison.OrdinalIgnoreCase)));
 
             return result;
         }
