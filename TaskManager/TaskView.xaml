@@ -17,6 +17,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
@@ -40,5 +41,9 @@
         <TextBox Text="{Binding Status}" Margin="5" Grid.Column="1" Grid.Row="5" ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto" />
         <local:NoteListView Grid.Row="6" Grid.ColumnSpan="2" DataContext="{Binding Notes}" />
         <local:TaskListView Grid.Row="7" Grid.ColumnSpan="2" DataContext="{Binding Tasks}" />
+        <StackPanel Grid.Row="8" Grid.ColumnSpan="2" Orientation="Horizontal" FlowDirection="RightToLeft">
+            <Button Content="Cancel" Command="{wpf:CommandBinding CancelCommand}" />
+            <Button Content="OK" Command="{wpf:CommandBinding OkCommand}" />            
+        </StackPanel>
     </Grid>
 </UserControl>

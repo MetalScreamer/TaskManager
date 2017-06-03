@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jsc.MvvmUtilities
 {
-    public interface IDataAccess<T>
+    public interface IStorage<T>
     {
         void Save(T obj);
         void Remove(T obj);

@@ -16,7 +16,7 @@ namespace Jsc.TaskManager.Models
     {
         public long NoteId { get; private set; }
 
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
         public string Text { get; set; }
 
         public long? ParentJobId { get; private set; } 

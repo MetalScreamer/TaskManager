@@ -54,9 +54,9 @@ namespace Jsc.TaskManager
                 .RegisterType<INoteViewModel, NoteViewModel>()
                 //Create an instance of the dal
                 .RegisterInstance(new TaskManagerDbContext())
-                .RegisterInstance<IDataAccess<IJob>>(container.Resolve<TaskManagerDbContext>())
-                .RegisterInstance<IDataAccess<ITask>>(container.Resolve<TaskManagerDbContext>())
-                .RegisterInstance<IDataAccess<INote>>(container.Resolve<TaskManagerDbContext>())
+                .RegisterInstance<IStorage<IJob>>(container.Resolve<TaskManagerDbContext>())
+                .RegisterInstance<IStorage<ITask>>(container.Resolve<TaskManagerDbContext>())
+                .RegisterInstance<IStorage<INote>>(container.Resolve<TaskManagerDbContext>())
                 .RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
                 .RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))
                 .RegisterInstance<Func<IContentManager, ITaskViewModel>>(cm => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm)))

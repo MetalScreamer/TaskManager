@@ -24,7 +24,6 @@ namespace Jsc.TaskManager.ViewModels
         private string name;
         private ITaskViewModel selectedTask;
         private IContentManager contentManager;
-        private Action<ITaskViewModel> taskAddedCallback;
 
         public string Name
         {
@@ -75,11 +74,7 @@ namespace Jsc.TaskManager.ViewModels
             get { return EditTask; }
         }
 
-        public Action<ITaskViewModel> TaskAddedCallback
-        {
-            get { return taskAddedCallback; }
-            set { taskAddedCallback = value; }
-        }
+        public Action<ITaskViewModel> TaskAddedCallback { get; set; }
 
         public TaskListViewModel(
             IContentManager contentManager,
@@ -117,7 +112,9 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoRemoveTask()
         {
-            Tasks.Remove(Selected);
+            var task = Selected;
+            Tasks.Remove(task);
+            task.Remove();
         }
 
         private void DoAddTask(Func<ITaskViewModel> taskFactory)
@@ -126,7 +123,7 @@ namespace Jsc.TaskManager.ViewModels
             newTask.Name = Tasks.GetUniqueName("Task");
             Tasks.Add(newTask);
             TaskAddedCallback?.Invoke(newTask);
-            //newTask.Save();            
+            newTask.Save();            
             //contentManager.Load(newTask);
         }
     }

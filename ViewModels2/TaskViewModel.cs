@@ -34,7 +34,7 @@ namespace Jsc.TaskManager.ViewModels
         private DateTime dueDate;
         private TaskPriority priority;
         private TaskStatus status;
-        private IDataAccess<ITask> dal;
+        private IStorage<ITask> dal;
         private IContentManager contentManager;      
 
         public ITask Task { get; }
@@ -90,7 +90,7 @@ namespace Jsc.TaskManager.ViewModels
             IContentManager contentManager,
             Func<IContentManager, ITaskViewModel, INoteListViewModel> noteListFactory,
             Func<IContentManager, ITaskViewModel, ITaskListViewModel> taskListFactory,
-            IDataAccess<ITask> dal)
+            IStorage<ITask> dal)
         {
             this.Task = task;
             this.dal = dal;
@@ -98,12 +98,19 @@ namespace Jsc.TaskManager.ViewModels
 
             Tasks = taskListFactory(contentManager, this);
             Notes = noteListFactory(contentManager, this);
+
             LoadFromTask(task);
 
             Tasks.TaskAddedCallback = TaskAdded;
+            Notes.NoteAddedCallback = NoteAdded;
 
             OkCommad = new DelegateCommand(_ => DoOk());
             CancelCommand = new DelegateCommand(_ => DoCancel());
+        }
+
+        private void NoteAdded(INoteViewModel noteVm)
+        {
+            Task.AddNote(noteVm.Note);
         }
 
         private void TaskAdded(ITaskViewModel taskVm)
@@ -119,7 +126,8 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoOk()
         {
-            throw new NotImplementedException();
+            Save();
+            contentManager.Unload(this);
         }
 
         public void Save()

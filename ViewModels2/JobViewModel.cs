@@ -29,7 +29,7 @@ namespace Jsc.TaskManager.ViewModels
         private string description;
         private string name;
         private IContentManager contentManager;
-        private IDataAccess<IJob> dal;
+        private IStorage<IJob> dal;
 
         public IJob Job { get; }
 
@@ -66,7 +66,7 @@ namespace Jsc.TaskManager.ViewModels
             IJob job,
             Func<IContentManager, IJobViewModel, INoteListViewModel> noteListFactory,
             Func<IContentManager, IJobViewModel, ITaskListViewModel> taskListFactory,
-            IDataAccess<IJob> dal)
+            IStorage<IJob> dal)
         {
             this.contentManager = contentManager;
             this.dal = dal;
@@ -78,9 +78,15 @@ namespace Jsc.TaskManager.ViewModels
             Tasks = taskListFactory(contentManager, this);
 
             Tasks.TaskAddedCallback = TaskAdded;
+            Notes.NoteAddedCallback = NoteAdded;
 
             OkCommand = new DelegateCommand(_ => DoOk());
             CancelCommand = new DelegateCommand(_ => DoCancel());
+        }
+
+        private void NoteAdded(INoteViewModel noteVm)
+        {
+            Job.AddNote(noteVm.Note);
         }
 
         private void TaskAdded(ITaskViewModel taskVm)

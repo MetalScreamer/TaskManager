@@ -12,7 +12,9 @@ namespace Jsc.TaskManager.ViewModels
     {
         INote Note { get; }
         string Text { get; set; }
-        DateTime DateTime { get; set; }
+        DateTime DateTime { get; }
+        void Save();
+        void Remove();
     }
 
     public class NoteViewModel : UndoableViewModel, INoteViewModel
@@ -22,6 +24,8 @@ namespace Jsc.TaskManager.ViewModels
         private string displayDate;
         private string displayTime;
         private IContentManager contentManager;
+        private IStorage<INote> noteStorage;
+        private string displayDateAndTime;
 
         public INote Note { get; }
 
@@ -34,7 +38,7 @@ namespace Jsc.TaskManager.ViewModels
         public DateTime DateTime
         {
             get { return date; }
-            set
+            private set
             {
                 SetProperty(ref date, value, v => date = v);
                 SetDisplayDateAndTime();
@@ -53,30 +57,53 @@ namespace Jsc.TaskManager.ViewModels
             private set { SetProperty(ref displayTime, value); }
         }
 
-        public string DisplayDateAndTime { get; private set; }
+        public string DisplayDateAndTime
+        {
+            get { return displayDateAndTime; }
+            private set { SetProperty(ref displayDateAndTime, value); }
+        }
 
         public DelegateCommand OkCommand { get; }
         public DelegateCommand CancelCommand { get; }
 
-        public NoteViewModel(IContentManager contentManager, INote note)
+        public NoteViewModel(
+            IContentManager contentManager, 
+            INote note,
+            IStorage<INote> noteStorage)
         {
             Note = note;
-
-            Text = note.Text;
-            DateTime = note.DateTime;
+            DateTime = DateTime.Now;
+            this.noteStorage = noteStorage;
+            LoadFromNote(note);
             this.contentManager = contentManager;
 
             OkCommand = new DelegateCommand(_ => DoOk());
             CancelCommand = new DelegateCommand(_ => DoCancel());
         }
 
+        private void LoadFromNote(INote note)
+        {
+            Text = note.Text;
+            DateTime = note.DateTime == DateTime.MinValue ? DateTime.Now : note.DateTime;
+        }
+
+        private void WriteToNote(INote note)
+        {
+            note.Text = Text;
+            note.DateTime = DateTime;            
+        }
+
         private void DoCancel()
         {
+            LoadFromNote(Note);
             contentManager.Unload(this);
         }
 
         private void DoOk()
         {
+            WriteToNote(Note);
+            noteStorage.Save(Note);
+            noteStorage.Commit();
             contentManager.Unload(this);
         }
 
@@ -86,6 +113,19 @@ namespace Jsc.TaskManager.ViewModels
             DisplayTime = DateTime.ToString("hh:mm:ss tt");
             DisplayDateAndTime = $"{DisplayDate} {DisplayTime}";
             RaisePropertyChanged(nameof(DisplayDateAndTime));
+        }
+
+        public void Save()
+        {
+            WriteToNote(Note);
+            noteStorage.Save(Note);
+            noteStorage.Commit();
+        }
+
+        public void Remove()
+        {
+            noteStorage.Remove(Note);
+            noteStorage.Commit();
         }
     }
 }

@@ -16,13 +16,13 @@ namespace Jsc.TaskManager.ViewModels
         ICommand Remove { get; }
         ICommand EditNote { get; }
         IEnumerable<MenuItem> ContextMenu { get; }
+        Action<INoteViewModel> NoteAddedCallback { get; set; }
     }
 
     public class NoteListViewModel : ViewModelBase, INoteListViewModel
     {
         private INoteViewModel selected;
         private IContentManager contentManager;
-        private IEnumerable<INoteViewModel> initialNotes;
 
         public ObservableCollection<INoteViewModel> Notes { get; } = new ObservableCollection<INoteViewModel>();
         public ObservableCollection<MenuItem> ContextMenu { get; } = new ObservableCollection<MenuItem>();
@@ -40,6 +40,8 @@ namespace Jsc.TaskManager.ViewModels
                 Remove.RaiseCanExecuteChanged();
             }
         }
+
+        public Action<INoteViewModel> NoteAddedCallback { get; set; }
 
         IEnumerable<INoteViewModel> INoteListViewModel.Notes
         {
@@ -72,7 +74,11 @@ namespace Jsc.TaskManager.ViewModels
             Func<IContentManager, INoteViewModel> noteFactory)
         {
             this.contentManager = contentManager;
-            this.initialNotes = initialNotes;
+
+            foreach (var note in initialNotes)
+            {
+                Notes.Add(note);
+            }
 
             Add = new DelegateCommand(_ => AddNote(() => noteFactory(contentManager)));
             Remove = new DelegateCommand(_ => RemoveNote(), _ => CanRemoveNote());
@@ -93,14 +99,16 @@ namespace Jsc.TaskManager.ViewModels
 
         private void RemoveNote()
         {
-            Notes.Remove(Selected);
+            var noteVm = Selected;
+            noteVm.Remove();
+            Notes.Remove(noteVm);
         }
 
         private void AddNote(Func<INoteViewModel> noteFactory)
         {
             var newNote = noteFactory();
-            newNote.DateTime = DateTime.Now;
             Notes.Add(newNote);
+            NoteAddedCallback?.Invoke(newNote);
         }
     }
 }
