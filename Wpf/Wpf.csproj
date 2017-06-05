@@ -48,8 +48,10 @@
     <Compile Include="CommandBindingExtension.cs" />
     <Compile Include="CommandConverter.cs" />
     <Compile Include="CommandWrapper.cs" />
-    <Compile Include="ConverterBase.cs" />
+    <Compile Include="MarkupBase.cs" />
+    <Compile Include="ConverterChain.cs" />
     <Compile Include="DataGrid.cs" />
+    <Compile Include="BoolNegationConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -7,6 +7,7 @@ namespace Jsc.TaskManager.Models
     {
         DateTime DateTime { get; set; }
         string Text { get; set; }
+        bool IsNew { get; }
 
         IJob ParentJob { get; set; }
         ITask ParentTask { get; set; }
@@ -18,6 +19,7 @@ namespace Jsc.TaskManager.Models
 
         public DateTime DateTime { get; set; } = DateTime.Now;
         public string Text { get; set; }
+        public bool IsNew { get { return NoteId == 0; } }
 
         public long? ParentJobId { get; private set; } 
         [ForeignKey("ParentJobId")]

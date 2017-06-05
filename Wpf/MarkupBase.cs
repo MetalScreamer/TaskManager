@@ -7,7 +7,7 @@ using System.Windows.Markup;
 
 namespace Jsc.Wpf
 {
-    public class ConverterBase : MarkupExtension
+    public class MarkupBase : MarkupExtension
     {
         public override object ProvideValue(IServiceProvider serviceProvider)
         {

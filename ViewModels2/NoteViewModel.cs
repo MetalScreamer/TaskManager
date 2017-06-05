@@ -13,6 +13,9 @@ namespace Jsc.TaskManager.ViewModels
         INote Note { get; }
         string Text { get; set; }
         DateTime DateTime { get; }
+        bool IsNew { get; }
+        bool IsEditable { get; }
+        bool IsLocked { get; set; }
         void Save();
         void Remove();
     }
@@ -26,6 +29,9 @@ namespace Jsc.TaskManager.ViewModels
         private IContentManager contentManager;
         private IStorage<INote> noteStorage;
         private string displayDateAndTime;
+        private bool isNew = true;
+        private bool isLocked = true;
+        private bool isEditable;
 
         public INote Note { get; }
 
@@ -42,7 +48,7 @@ namespace Jsc.TaskManager.ViewModels
             {
                 SetProperty(ref date, value, v => date = v);
                 SetDisplayDateAndTime();
-            }            
+            }
         }
 
         public string DisplayDate
@@ -63,6 +69,36 @@ namespace Jsc.TaskManager.ViewModels
             private set { SetProperty(ref displayDateAndTime, value); }
         }
 
+        public bool IsNew
+        {
+            get { return isNew; }
+            private set
+            {
+                if(SetProperty(ref isNew, value))
+                {
+                    SetIsEditable();
+                }
+            }
+        }
+
+        public bool IsEditable
+        {
+            get { return isEditable; }
+            private set { SetProperty(ref isEditable, value); }
+        }
+
+        public bool IsLocked
+        {
+            get { return isLocked; }
+            set
+            {
+                if(SetProperty(ref isLocked, value))
+                {
+                    SetIsEditable();
+                }
+            }
+        }       
+
         public DelegateCommand OkCommand { get; }
         public DelegateCommand CancelCommand { get; }
 
@@ -72,13 +108,20 @@ namespace Jsc.TaskManager.ViewModels
             IStorage<INote> noteStorage)
         {
             Note = note;
+            IsNew = note.IsNew;
+            IsLocked = !IsNew;
             DateTime = DateTime.Now;
             this.noteStorage = noteStorage;
             LoadFromNote(note);
             this.contentManager = contentManager;
 
             OkCommand = new DelegateCommand(_ => DoOk());
-            CancelCommand = new DelegateCommand(_ => DoCancel());
+            CancelCommand = new DelegateCommand(_ => DoCancel());            
+        }
+
+        private void SetIsEditable()
+        {
+            IsEditable = IsNew || !IsLocked;
         }
 
         private void LoadFromNote(INote note)
@@ -101,9 +144,7 @@ namespace Jsc.TaskManager.ViewModels
 
         private void DoOk()
         {
-            WriteToNote(Note);
-            noteStorage.Save(Note);
-            noteStorage.Commit();
+            Save();
             contentManager.Unload(this);
         }
 
@@ -120,6 +161,8 @@ namespace Jsc.TaskManager.ViewModels
             WriteToNote(Note);
             noteStorage.Save(Note);
             noteStorage.Commit();
+            IsNew = false;
+            IsLocked = true;
         }
 
         public void Remove()
