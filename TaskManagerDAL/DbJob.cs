@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.DAL
 {
-    class TaskStore
+    class DbJob
     {
     }
 }

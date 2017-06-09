@@ -15,21 +15,34 @@ namespace Jsc.Wpf
                 nameof(DisableOffRowContextMenu),
                 typeof(bool),
                 typeof(DataGrid),
-                new UIPropertyMetadata(false, new PropertyChangedCallback(DisableOffRowContextMenuChanged)));        
+                new UIPropertyMetadata(false, new PropertyChangedCallback(DisableOffRowContextMenuChanged)));
 
         public static readonly DependencyProperty DisableOffRowDoubleClickProperty =
             DependencyProperty.Register(
                 nameof(DisableOffRowDoubleClick),
                 typeof(bool),
                 typeof(DataGrid),
-                new UIPropertyMetadata(false, new PropertyChangedCallback(DisableOffRowDoubleClickChanged)));        
+                new UIPropertyMetadata(false, new PropertyChangedCallback(DisableOffRowDoubleClickChanged)));
 
         public static readonly DependencyProperty DeselectWhenClickOffRowProperty =
             DependencyProperty.Register(
                 nameof(DeselectWhenClickOffRow),
                 typeof(bool),
                 typeof(DataGrid),
-                new UIPropertyMetadata(false, DeselectWhenClickOffRowChanged));        
+                new UIPropertyMetadata(false, DeselectWhenClickOffRowChanged));
+
+        public static readonly DependencyProperty ScrollToSelectedItemProperty =
+            DependencyProperty.Register(
+                nameof(ScrollToSelectedItem),
+                typeof(bool),
+                typeof(DataGrid),
+                new UIPropertyMetadata(false, ScrollToSelectedItemChanged));
+
+        public bool ScrollToSelectedItem
+        {
+            get { return (bool)GetValue(ScrollToSelectedItemProperty); }
+            set { SetValue(ScrollToSelectedItemProperty, value); }
+        }
 
         public bool DisableOffRowContextMenu
         {
@@ -74,7 +87,7 @@ namespace Jsc.Wpf
             {
                 if ((bool)e.NewValue)
                 {
-                    dataGrid.MouseDoubleClick += DataGrid_MouseDoubleClick;               
+                    dataGrid.MouseDoubleClick += DataGrid_MouseDoubleClick;
                 }
                 else
                 {
@@ -156,7 +169,33 @@ namespace Jsc.Wpf
                 var dataGrid = sender as DataGrid;
                 dataGrid.SelectedIndex = -1;
             }
-        }        
+        }
+
+        private static void ScrollToSelectedItemChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var dataGrid = d as DataGrid;
+            if (dataGrid != null)
+            {
+                if ((bool)e.NewValue)
+                {
+                    dataGrid.SelectionChanged += DataGrid_SelectionChanged;
+                }
+                else
+                {
+                    dataGrid.SelectionChanged -= DataGrid_SelectionChanged;
+                }
+            }
+        }
+
+        private static void DataGrid_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var dataGrid = sender as DataGrid;
+
+            if (dataGrid?.SelectedItem != null)
+            {
+                dataGrid.ScrollIntoView(dataGrid.SelectedItem);
+            }
+        }
 
         private static bool IsCell(DependencyObject dependencyObject)
         {

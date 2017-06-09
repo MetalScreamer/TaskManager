@@ -74,9 +74,10 @@ namespace Jsc.TaskManager.ViewModels
             get { return isNew; }
             private set
             {
-                if(SetProperty(ref isNew, value))
+                if (SetProperty(ref isNew, value))
                 {
                     SetIsEditable();
+                    SetDisplayDateAndTime();
                 }
             }
         }
@@ -92,18 +93,18 @@ namespace Jsc.TaskManager.ViewModels
             get { return isLocked; }
             set
             {
-                if(SetProperty(ref isLocked, value))
+                if (SetProperty(ref isLocked, value))
                 {
                     SetIsEditable();
                 }
             }
-        }       
+        }
 
         public DelegateCommand OkCommand { get; }
         public DelegateCommand CancelCommand { get; }
 
         public NoteViewModel(
-            IContentManager contentManager, 
+            IContentManager contentManager,
             INote note,
             IStorage<INote> noteStorage)
         {
@@ -116,7 +117,23 @@ namespace Jsc.TaskManager.ViewModels
             this.contentManager = contentManager;
 
             OkCommand = new DelegateCommand(_ => DoOk());
-            CancelCommand = new DelegateCommand(_ => DoCancel());            
+            CancelCommand = new DelegateCommand(_ => DoCancel());
+
+            var tsk = RunUpdateTimer();
+        }
+
+        private async System.Threading.Tasks.Task RunUpdateTimer()
+        {
+            while (IsNew)
+            {
+                var msToNextMinute = (60 - DateTime.Now.Second) * 1000;
+                await System.Threading.Tasks.Task.Delay(msToNextMinute);
+
+                if (IsNew)
+                {
+                    DateTime = DateTime.Now;
+                }
+            }
         }
 
         private void SetIsEditable()
@@ -133,7 +150,7 @@ namespace Jsc.TaskManager.ViewModels
         private void WriteToNote(INote note)
         {
             note.Text = Text;
-            note.DateTime = DateTime;            
+            note.DateTime = DateTime;
         }
 
         private void DoCancel()
@@ -151,13 +168,18 @@ namespace Jsc.TaskManager.ViewModels
         private void SetDisplayDateAndTime()
         {
             DisplayDate = DateTime.ToString("MM/dd/yyyy");
-            DisplayTime = DateTime.ToString("hh:mm:ss tt");
+            DisplayTime = IsNew ? DateTime.ToString("hh:mm tt") : DateTime.ToString("hh:mm:ss tt");
             DisplayDateAndTime = $"{DisplayDate} {DisplayTime}";
             RaisePropertyChanged(nameof(DisplayDateAndTime));
         }
 
         public void Save()
         {
+            //set final date on new records
+            if (IsNew)
+            {
+                DateTime = DateTime.Now;
+            }
             WriteToNote(Note);
             noteStorage.Save(Note);
             noteStorage.Commit();

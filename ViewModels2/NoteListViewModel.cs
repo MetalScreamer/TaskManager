@@ -109,6 +109,7 @@ namespace Jsc.TaskManager.ViewModels
             var newNote = noteFactory();
             Notes.Add(newNote);
             NoteAddedCallback?.Invoke(newNote);
+            Selected = newNote;
         }
     }
 }

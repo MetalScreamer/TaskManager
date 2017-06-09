@@ -123,7 +123,8 @@ namespace Jsc.TaskManager.ViewModels
             newTask.Name = Tasks.GetUniqueName("Task");
             Tasks.Add(newTask);
             TaskAddedCallback?.Invoke(newTask);
-            newTask.Save();            
+            newTask.Save();
+            Selected = newTask;         
             //contentManager.Load(newTask);
         }
     }

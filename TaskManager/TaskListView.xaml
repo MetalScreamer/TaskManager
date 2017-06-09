@@ -33,6 +33,7 @@
                 DisableOffRowContextMenu="True"
                 DisableOffRowDoubleClick="True"
                 DeselectWhenClickOffRow="True"
+                ScrollToSelectedItem="True"
                 >
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="MouseDoubleClick">

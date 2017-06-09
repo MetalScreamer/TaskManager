@@ -11,7 +11,7 @@ using System.Windows.Markup;
 namespace Jsc.Wpf
 {
     [ContentProperty("Converters")]
-    //[ContentWrapper(typeof(ConverterCollection))]
+    [ContentWrapper(typeof(ConverterCollection))]
     public class ConverterChain : IValueConverter
     {
         public ICollection<IValueConverter> Converters { get; set; } = new Collection<IValueConverter>();
@@ -30,5 +30,5 @@ namespace Jsc.Wpf
         }
     }
 
-    public class ConverterCollection : Collection<IValueConverter> { }
+    public class ConverterCollection : Collection<IValueConverter> { }    
 }

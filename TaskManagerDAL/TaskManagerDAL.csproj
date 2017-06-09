@@ -49,9 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DbJob.cs" />
+    <Compile Include="DbNote.cs" />
     <Compile Include="TaskManagerDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TaskStore.cs" />
+    <Compile Include="DbTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
