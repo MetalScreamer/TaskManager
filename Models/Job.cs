@@ -1,62 +1,41 @@
-﻿using System;
+﻿using Jsc.TaskManager.DomainRepositories;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 
 namespace Jsc.TaskManager.Models
 {
-    public interface IJob
-    {
-        long JobId { get; set; }
-        string Name { get; set; }
-        string Description { get; set; }
-        IEnumerable<ITask> Tasks { get; }
-        IEnumerable<INote> Notes { get; }
-
-        void AddTask(ITask task);
-        void RemoveTask(ITask task);
-
-        void AddNote(INote note);
-        void RemoveNote(INote note);
-    }
+    
 
     public class Job : IJob
     {
-        public long JobId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public virtual List<Task> Tasks { get; } = new List<Task>();
-        public virtual List<Note> Notes { get; } = new List<Note>();
+        public IList<ITask> Tasks { get; }
+        public IList<INote> Notes { get; }
 
-        IEnumerable<ITask> IJob.Tasks
+        public Job()
         {
-            get { return Tasks; }
+            var tasks = new ObservableCollection<ITask>();
+            Tasks = tasks;
+            tasks.CollectionChanged += Tasks_CollectionChanged;
+
+            var notes = new ObservableCollection<INote>();
+            Notes = notes;
+            notes.CollectionChanged += Notes_CollectionChanged;
         }
 
-        IEnumerable<INote> IJob.Notes
+        private void Notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            get { return Notes; }
+            
         }
 
-        void IJob.AddTask(ITask task)
+        private void Tasks_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            task.ParentJob = this;
-            Tasks.Add((Task)task);
+            
         }
 
-        void IJob.RemoveTask(ITask task)
-        {
-            Tasks.Remove((Task)task);
-        }
-
-        void IJob.AddNote(INote note)
-        {
-            note.ParentJob = this;
-            Notes.Add((Note)note);
-        }
-
-        public void RemoveNote(INote note)
-        {
-            Notes.Remove((Note)note);
-        }
+        long IBusinessEntity.Id { get; set; }
     }
 }

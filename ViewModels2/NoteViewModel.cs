@@ -10,7 +10,7 @@ namespace Jsc.TaskManager.ViewModels
 {
     public interface INoteViewModel
     {
-        INote Note { get; }
+        //INote Note { get; }
         string Text { get; set; }
         DateTime DateTime { get; }
         bool IsNew { get; }
@@ -27,13 +27,13 @@ namespace Jsc.TaskManager.ViewModels
         private string displayDate;
         private string displayTime;
         private IContentManager contentManager;
-        private IStorage<INote> noteStorage;
+        //private IRepository<INote> noteStorage;
         private string displayDateAndTime;
         private bool isNew = true;
         private bool isLocked = true;
         private bool isEditable;
 
-        public INote Note { get; }
+        //public INote Note { get; }
 
         public string Text
         {
@@ -104,20 +104,20 @@ namespace Jsc.TaskManager.ViewModels
         public DelegateCommand CancelCommand { get; }
 
         public NoteViewModel(
-            IContentManager contentManager,
+            IContentManager contentManager/*,
             INote note,
-            IStorage<INote> noteStorage)
+            IRepository<INote> noteStorage*/)
         {
-            Note = note;
-            IsNew = note.IsNew;
+            //Note = note;
+            //IsNew = note.IsNew;
             IsLocked = !IsNew;
             DateTime = DateTime.Now;
-            this.noteStorage = noteStorage;
-            LoadFromNote(note);
+            //this.noteStorage = noteStorage;
+            //LoadFromNote(note);
             this.contentManager = contentManager;
 
             OkCommand = new DelegateCommand(_ => DoOk());
-            CancelCommand = new DelegateCommand(_ => DoCancel());
+            //CancelCommand = new DelegateCommand(_ => DoCancel());
 
             var tsk = RunUpdateTimer();
         }
@@ -141,23 +141,23 @@ namespace Jsc.TaskManager.ViewModels
             IsEditable = IsNew || !IsLocked;
         }
 
-        private void LoadFromNote(INote note)
-        {
-            Text = note.Text;
-            DateTime = note.DateTime == DateTime.MinValue ? DateTime.Now : note.DateTime;
-        }
+        //private void LoadFromNote(INote note)
+        //{
+        //    Text = note.Text;
+        //    DateTime = note.DateTime == DateTime.MinValue ? DateTime.Now : note.DateTime;
+        //}
 
-        private void WriteToNote(INote note)
-        {
-            note.Text = Text;
-            note.DateTime = DateTime;
-        }
+        //private void WriteToNote(INote note)
+        //{
+        //    note.Text = Text;
+        //    note.DateTime = DateTime;
+        //}
 
-        private void DoCancel()
-        {
-            LoadFromNote(Note);
-            contentManager.Unload(this);
-        }
+        //private void DoCancel()
+        //{
+        //    LoadFromNote(Note);
+        //    contentManager.Unload(this);
+        //}
 
         private void DoOk()
         {
@@ -180,17 +180,17 @@ namespace Jsc.TaskManager.ViewModels
             {
                 DateTime = DateTime.Now;
             }
-            WriteToNote(Note);
-            noteStorage.Save(Note);
-            noteStorage.Commit();
+            //WriteToNote(Note);
+            //noteStorage.Save(Note);
+            //noteStorage.Commit();
             IsNew = false;
             IsLocked = true;
         }
 
         public void Remove()
         {
-            noteStorage.Remove(Note);
-            noteStorage.Commit();
+            //noteStorage.Remove(Note);
+            //noteStorage.Commit();
         }
     }
 }

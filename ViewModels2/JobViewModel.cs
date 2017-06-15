@@ -11,7 +11,7 @@ namespace Jsc.TaskManager.ViewModels
 {
     public interface IJobViewModel : IHasName
     {
-        IJob Job { get; }
+        //IJob Job { get; }
         string Description { get; set; }
 
         INoteListViewModel Notes { get; }
@@ -29,9 +29,9 @@ namespace Jsc.TaskManager.ViewModels
         private string description;
         private string name;
         private IContentManager contentManager;
-        private IStorage<IJob> dal;
+        //private IRepository<IJob> dal;
 
-        public IJob Job { get; }
+        //public IJob Job { get; }
 
         public string Description
         {
@@ -63,40 +63,40 @@ namespace Jsc.TaskManager.ViewModels
 
         public JobViewModel(
             IContentManager contentManager, 
-            IJob job,
+            //IJob job,
             Func<IContentManager, IJobViewModel, INoteListViewModel> noteListFactory,
-            Func<IContentManager, IJobViewModel, ITaskListViewModel> taskListFactory,
-            IStorage<IJob> dal)
+            Func<IContentManager, IJobViewModel, ITaskListViewModel> taskListFactory/*,
+            IRepository<IJob> dal*/)
         {
             this.contentManager = contentManager;
-            this.dal = dal;
+            //this.dal = dal;
 
-            Job = job;
-            LoadFromJob(job);
+            //Job = job;
+            //LoadFromJob(job);
 
             Notes = noteListFactory(contentManager, this);
             Tasks = taskListFactory(contentManager, this);
 
-            Tasks.TaskAddedCallback = TaskAdded;
-            Notes.NoteAddedCallback = NoteAdded;
+            //Tasks.TaskAddedCallback = TaskAdded;
+            //Notes.NoteAddedCallback = NoteAdded;
 
             OkCommand = new DelegateCommand(_ => DoOk());
             CancelCommand = new DelegateCommand(_ => DoCancel());
         }
 
-        private void NoteAdded(INoteViewModel noteVm)
-        {
-            Job.AddNote(noteVm.Note);
-        }
+        //private void NoteAdded(INoteViewModel noteVm)
+        //{
+        //    Job.AddNote(noteVm.Note);
+        //}
 
-        private void TaskAdded(ITaskViewModel taskVm)
-        {
-            Job.AddTask(taskVm.Task);
-        }
+        //private void TaskAdded(ITaskViewModel taskVm)
+        //{
+        //    Job.AddTask(taskVm.Task);
+        //}
 
         private void DoCancel()
         {
-            LoadFromJob(Job);
+            //LoadFromJob(Job);
             contentManager.Unload(this);
         }
 
@@ -109,27 +109,27 @@ namespace Jsc.TaskManager.ViewModels
 
         public void Remove()
         {
-            dal.Remove(Job);
-            dal.Commit();
+            //dal.Remove(Job);
+            //dal.Commit();
         }
 
         public void Save()
         {
-            WriteToModel(Job);
-            dal.Save(Job);
-            dal.Commit();
+            //WriteToModel(Job);
+            //dal.Save(Job);
+            //dal.Commit();
         }
 
-        private void WriteToModel(IJob job)
-        {
-            job.Name = Name;
-            job.Description = Description;
-        }
+        //private void WriteToModel(IJob job)
+        //{
+        //    job.Name = Name;
+        //    job.Description = Description;
+        //}
 
-        private void LoadFromJob(IJob job)
-        {
-            Name = job.Name;
-            Description = job.Description;
-        }
+        //private void LoadFromJob(IJob job)
+        //{
+        //    Name = job.Name;
+        //    Description = job.Description;
+        //}
     }
 }

@@ -10,12 +10,12 @@ namespace Jsc.TaskManager.ViewModels
 {
     public interface ITaskViewModel : IHasName
     {
-        ITask Task { get; }
+        //ITask Task { get; }
 
         string Description { get; set; }
         DateTime DueDate { get; set; }
-        TaskPriority Priority { get; set; }
-        TaskStatus Status { get; set; }
+        //TaskPriority Priority { get; set; }
+        //TaskStatus Status { get; set; }
 
         INoteListViewModel Notes { get; }
         ITaskListViewModel Tasks { get; }
@@ -32,12 +32,12 @@ namespace Jsc.TaskManager.ViewModels
         private string name;
         private string description;
         private DateTime dueDate;
-        private TaskPriority priority;
-        private TaskStatus status;
-        private IStorage<ITask> dal;
+        //private TaskPriority priority;
+        //private TaskStatus status;
+        //private IRepository<ITask> dal;
         private IContentManager contentManager;      
 
-        public ITask Task { get; }
+        //public ITask Task { get; }
 
         public string Name
         {
@@ -57,17 +57,17 @@ namespace Jsc.TaskManager.ViewModels
             set { SetProperty(ref dueDate, value, v => dueDate = v); }
         }
 
-        public TaskPriority Priority
-        {
-            get { return priority; }
-            set { SetProperty(ref priority, value, v => priority = v); }
-        }
+        //public TaskPriority Priority
+        //{
+        //    get { return priority; }
+        //    set { SetProperty(ref priority, value, v => priority = v); }
+        //}
 
-        public TaskStatus Status
-        {
-            get { return status; }
-            set { SetProperty(ref status, value, v => status = v); }
-        }
+        //public TaskStatus Status
+        //{
+        //    get { return status; }
+        //    set { SetProperty(ref status, value, v => status = v); }
+        //}
 
         public INoteListViewModel Notes { get; }
         public ITaskListViewModel Tasks { get; }
@@ -86,20 +86,20 @@ namespace Jsc.TaskManager.ViewModels
         }
 
         public TaskViewModel(
-            ITask task,
+            //ITask task,
             IContentManager contentManager,
             Func<IContentManager, ITaskViewModel, INoteListViewModel> noteListFactory,
-            Func<IContentManager, ITaskViewModel, ITaskListViewModel> taskListFactory,
-            IStorage<ITask> dal)
+            Func<IContentManager, ITaskViewModel, ITaskListViewModel> taskListFactory/*,
+            IRepository<ITask> dal*/)
         {
-            this.Task = task;
-            this.dal = dal;
+            //this.Task = task;
+            //this.dal = dal;
             this.contentManager = contentManager;
 
             Tasks = taskListFactory(contentManager, this);
             Notes = noteListFactory(contentManager, this);
 
-            LoadFromTask(task);
+            //LoadFromTask(task);
 
             Tasks.TaskAddedCallback = TaskAdded;
             Notes.NoteAddedCallback = NoteAdded;
@@ -110,18 +110,18 @@ namespace Jsc.TaskManager.ViewModels
 
         private void NoteAdded(INoteViewModel noteVm)
         {
-            Task.AddNote(noteVm.Note);
+            //Task.AddNote(noteVm.Note);
         }
 
         private void TaskAdded(ITaskViewModel taskVm)
         {
-            Task.AddChild(taskVm.Task);
+            //Task.AddChild(taskVm.Task);
         }
 
         private void DoCancel()
         {
-            LoadFromTask(Task);
-            contentManager.Unload(this);
+            //LoadFromTask(Task);
+            //contentManager.Unload(this);
         }
 
         private void DoOk()
@@ -132,33 +132,33 @@ namespace Jsc.TaskManager.ViewModels
 
         public void Save()
         {
-            WriteToModel(Task);
-            dal.Save(Task);
-            dal.Commit();
+            //WriteToModel(Task);
+            //dal.Save(Task);
+            //dal.Commit();
         }
 
         public void Remove()
         {
-            dal.Remove(Task);
-            dal.Commit();
+            //dal.Remove(Task);
+            //dal.Commit();
         }
 
-        private void LoadFromTask(ITask task)
-        {
-            Name = task.Name;
-            Description = task.Description;
-            DueDate = task.DueDate;
-            Priority = task.Priority;
-            Status = task.Status;
-        }
+        //private void LoadFromTask(ITask task)
+        //{
+        //    Name = task.Name;
+        //    Description = task.Description;
+        //    DueDate = task.DueDate;
+        //    Priority = task.Priority;
+        //    Status = task.Status;
+        //}
 
-        private void WriteToModel(ITask task)
-        {
-            task.Name = Name;
-            task.Description = Description;
-            task.DueDate = DueDate;
-            task.Priority = Priority;
-            task.Status = Status;
-        }
+        //private void WriteToModel(ITask task)
+        //{
+        //    task.Name = Name;
+        //    task.Description = Description;
+        //    task.DueDate = DueDate;
+        //    task.Priority = Priority;
+        //    task.Status = Status;
+        //}
     }
 }

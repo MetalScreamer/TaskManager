@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Jsc.MvvmUtilities
 {
-    public interface IStorage<T>
+    public interface IRepository<T>
     {
         void Save(T obj);
         void Remove(T obj);

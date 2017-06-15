@@ -51,22 +51,24 @@
   <ItemGroup>
     <Compile Include="DbJob.cs" />
     <Compile Include="DbNote.cs" />
+    <Compile Include="IRepository.cs" />
     <Compile Include="TaskManagerDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DbTask.cs" />
+    <Compile Include="Repository.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Models\Models.csproj">
-      <Project>{D46CC1E9-005D-42F9-8EEE-E37E32256323}</Project>
-      <Name>Models</Name>
-    </ProjectReference>
     <ProjectReference Include="..\MvvmUtilities\MvvmUtilities.csproj">
       <Project>{4473A485-EF39-4590-A030-0E2F2C0C970A}</Project>
       <Name>MvvmUtilities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TaskManagerDomainRepositories\TaskManagerDomainRepositories.csproj">
+      <Project>{9c509e8c-fdf1-49e5-9649-fe331a3cf6fd}</Project>
+      <Name>TaskManagerDomainRepositories</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

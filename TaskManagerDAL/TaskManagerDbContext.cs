@@ -1,113 +1,111 @@
-﻿using Jsc.MvvmUtilities;
-using Jsc.TaskManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
-using System.Linq;
-using System.Text;
+﻿//using Jsc.MvvmUtilities;
+//using Jsc.TaskManager.Models;
+//using System;
+//using System.Collections.Generic;
+//using System.Data.Entity;
+//using System.Linq;
+//using System.Text;
 
-namespace Jsc.TaskManager.DAL
-{
-    public class TaskManagerDbContext : 
-        DbContext, 
-        IStorage<IJob>, 
-        IStorage<INote>,
-        IStorage<ITask>
-    {
-        public DbSet<Job> Jobs { get; set; }
-        public DbSet<Task> Tasks { get; set; }
-        public DbSet<Note> Notes { get; set; }
+//namespace Jsc.TaskManager.DAL
+//{
+//    public class TaskManagerDbContext : 
+//        DbContext, 
+//        IRepository<IJob>, 
+//        IRepository<INote>,
+//        IRepository<ITask>
+//    {
+//        private Func<IJob> jobFactory;
+//        private Func<ITask> taskFactory;
+//        private Func<INote> noteFactory;
 
-        public TaskManagerDbContext() : base("TaskManager")
-        {
+//        DbSet<DbJob> Jobs { get; set; }
+//        DbSet<DbTask> Tasks { get; set; }
+//        DbSet<DbNote> Notes { get; set; }
 
-        }
+//        public TaskManagerDbContext(
+//            Func<IJob> jobFactory,
+//            Func<ITask> taskFactory,
+//            Func<INote> noteFactory) : base("TaskManager")
+//        {
+//            this.jobFactory = jobFactory;
+//            this.taskFactory = taskFactory;
+//            this.noteFactory = noteFactory;
+//        }
 
-        public static void Initialize()
-        {
-            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TaskManagerDbContext>());
-        }
+//        public static void Initialize()
+//        {
+//            Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TaskManagerDbContext>());
+//        }
 
-        public void Save(IJob obj)
-        {
-            var job = (Job)obj;
-            if (!Jobs.Any(j => job.JobId == j.JobId))
-            {
-                Jobs.Add(job);
-            }
-        }
+//        IJob IRepository<IJob>.Find(long id)
+//        {
+//            return MakeJob(Jobs.FirstOrDefault(j => j.JobId == id));
+//        }
 
-        public void Remove(IJob obj)
-        {
-            var job = (Job)obj;
+//        private IJob MakeJob(DbJob dbJob)
+//        {
+//            var result = jobFactory();
 
-            foreach (var note in job.Notes.ToList())
-            {
-                Remove(note);
-            }
+//            result.Id = dbJob.JobId;
+//            result.Name = dbJob.Name;
+//            result.Description = dbJob.Description;
 
-            foreach (var task in job.Tasks.ToList())
-            {
-                Remove(task);
-            }
+//            return result;
+//        }
 
-            if (Jobs.Any(j => job.JobId == j.JobId))
-            {
-                Jobs.Remove(job);
-            }
-        }
+//        public IEnumerable<IJob> Find(Predicate<DbJob> predicate)
+//        {
+//            return Jobs.Where(j => predicate(j)).Select(j => MakeJob(j));
+//        }
 
-        public void Save(INote obj)
-        {
-            var note = (Note)obj;
-            if (!Notes.Any(n => n.NoteId == note.NoteId))
-            {
-                Notes.Add(note);
-            }
-        }
+//        public void Save(IJob entity)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        public void Remove(INote obj)
-        {
-            var note = (Note)obj;
-            if (Notes.Any(n => n.NoteId == note.NoteId))
-            {
-                Notes.Remove(note);
-            }
-        }
+//        public void Remove(IJob entity)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        public void Save(ITask obj)
-        {
-            var task = (Task)obj;            
+//        INote IRepository<INote>.Find(long id)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-            if (!Tasks.Any(t => t.TaskId == task.TaskId))
-            {
-                Tasks.Add(task);
-            }
-        }
+//        public IEnumerable<INote> Find(Predicate<INote> predicate)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        public void Remove(ITask obj)
-        {
-            var task = (Task)obj;
+//        public void Save(INote entity)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-            foreach (var note in task.Notes.ToList())
-            {
-                Remove(note);
-            }
+//        public void Remove(INote entity)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-            foreach (var child in task.Children.ToList())
-            {
-                Remove(child);
-            }
+//        ITask IRepository<ITask>.Find(long id)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-            if (Tasks.Any(t => t.TaskId == task.TaskId))
-            {
-                Tasks.Remove(task);
-            }
-        }
+//        public IEnumerable<ITask> Find(Predicate<ITask> predicate)
+//        {
+//            throw new NotImplementedException();
+//        }
 
-        public void Commit()
-        {
-            this.SaveChanges();
-        }
-    }
-}
+//        public void Save(ITask entity)
+//        {
+//            throw new NotImplementedException();
+//        }
+
+//        public void Remove(ITask entity)
+//        {
+//            throw new NotImplementedException();
+//        }
+//    }
+//}
