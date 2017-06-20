@@ -184,6 +184,10 @@
       <Project>{dddcbf1c-9071-424d-9f8f-7b701393874a}</Project>
       <Name>TaskManagerDAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskManagerDomainRepositories\TaskManagerDomainRepositories.csproj">
+      <Project>{9C509E8C-FDF1-49E5-9649-FE331A3CF6FD}</Project>
+      <Name>TaskManagerDomainRepositories</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModels2\ViewModels.csproj">
       <Project>{2046b129-0272-4dc1-b55b-5c86f13bf961}</Project>
       <Name>ViewModels</Name>

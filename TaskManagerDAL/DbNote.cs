@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Jsc.TaskManager.DomainRepositories;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Jsc.TaskManager.DAL
 {
     [Table("Notes")]
-    class DbNote
+    public class DbNote : INoteStore
     {
         [Key]
         public long NoteId { get; private set; }

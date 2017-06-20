@@ -34,6 +34,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="IBusinessEntity.cs" />
+    <Compile Include="IJob.cs" />
+    <Compile Include="INote.cs" />
+    <Compile Include="ITask.cs" />
     <Compile Include="ITaskManagerDbContext.cs" />
     <Compile Include="Job.cs" />
     <Compile Include="Note.cs" />

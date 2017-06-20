@@ -7,11 +7,13 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.DAL
 {
-    public interface IRepository<T> where T: IBusinessEntity
+    public interface IRepository<TStorageEntity> 
+        where TStorageEntity : IStorageEntity
     {
-        T Find(long id);
+        TStorageEntity Find(long id);
+        IEnumerable<TStorageEntity> Find(Predicate<TStorageEntity> predicate);
         
-        void Save(T entity);        
-        void Remove(T entity);
+        void Save(TStorageEntity entity);        
+        void Remove(TStorageEntity entity);
     }
 }

@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.DomainRepositories
 {
-    public interface IJobRepository
+    public interface IJobRepository 
     {
+        void Add(params IJobStore[] items);
+        void Remove(params IJobStore[] items);
+        void Update(params IJobStore[] items);
+        IEnumerable<IJobStore> GetAll();
+        IJobStore GetById(long jobId);
     }
 }

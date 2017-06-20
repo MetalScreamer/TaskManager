@@ -1,5 +1,6 @@
 ﻿using Jsc.MvvmUtilities;
 using Jsc.TaskManager.DAL;
+using Jsc.TaskManager.DomainRepositories;
 using Jsc.TaskManager.Models;
 using Jsc.TaskManager.ViewModels;
 using Microsoft.Practices.Unity;
@@ -19,12 +20,17 @@ namespace Jsc.TaskManager
 
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            //container = new UnityContainer();
-            //TaskManagerDbContext.Initialize();
-            //RegisterTypes(container);
-            //var vm = container.Resolve<IMainWindowViewModel>();
-            //var win = new MainWindow(vm);
-            //var context = container.Resolve<TaskManagerDbContext>();
+            container = new UnityContainer();
+            //TaskMgrDbContext.Initialize();
+            RegisterTypes(container);
+            var vm = container.Resolve<IMainWindowViewModel>();
+            var win = new MainWindow(vm);
+
+            var storageConfiguration = container.Resolve<IStorageConfiguration>();
+            storageConfiguration.Initialize();
+            //var context = container.Resolve<TaskMgrDbContext>();
+
+            //var jobRepo = container.Resolve
 
             //var jobs = new List<IJobViewModel>();
             //foreach (var job in context.Jobs)
@@ -36,64 +42,67 @@ namespace Jsc.TaskManager
 
             //vm.Content = container.Resolve<IJobListViewModel>(new ParameterOverride("contentManager", vm), new ParameterOverride("jobs", jobs));
 
-            //win.Show();
+            win.Show();
         }
 
         public static void RegisterTypes(IUnityContainer container)
         {
-            //container
-            //    .RegisterType<IJob, Job>()
-            //    .RegisterType<ITask, Task>()
-            //    .RegisterType<INote, Note>()
-            //    .RegisterType<IMainWindowViewModel, MainWindowViewModel>()
-            //    .RegisterType<IJobListViewModel, JobListViewModel>()
-            //    .RegisterType<IJobViewModel, JobViewModel>()
-            //    .RegisterType<ITaskListViewModel, TaskListViewModel>()
-            //    .RegisterType<ITaskViewModel, TaskViewModel>()
-            //    .RegisterType<INoteListViewModel, NoteListViewModel>()
-            //    .RegisterType<INoteViewModel, NoteViewModel>()
-            //    //Create an instance of the dal
-            //    .RegisterInstance(new TaskManagerDbContext())
-            //    .RegisterInstance<IRepository<IJob>>(container.Resolve<TaskManagerDbContext>())
-            //    .RegisterInstance<IRepository<ITask>>(container.Resolve<TaskManagerDbContext>())
-            //    .RegisterInstance<IRepository<INote>>(container.Resolve<TaskManagerDbContext>())
-            //    .RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
-            //    .RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))
-            //    .RegisterInstance<Func<IContentManager, ITaskViewModel>>(cm => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm)))
-            //    .RegisterInstance<Func<IContentManager, INote, INoteViewModel>>((cm, n) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("note", n)))
-            //    .RegisterInstance<Func<IContentManager, INoteViewModel>>((cm) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm)))
-            //    .RegisterInstance<Func<IContentManager, IJobViewModel, INoteListViewModel>>(
-            //        (cm, jvm) =>
-            //        {
-            //            var noteFactory = container.Resolve<Func<IContentManager, INote, INoteViewModel>>();
-            //            var notes = jvm.Job.Notes.Select(n => noteFactory(cm, n));
+            container
+                .RegisterType<IJob, Job>()
+                .RegisterType<ITask, Task>()
+                .RegisterType<INote, Note>()
+                .RegisterType<IMainWindowViewModel, MainWindowViewModel>()
+                .RegisterType<IJobListViewModel, JobListViewModel>()
+                .RegisterType<IJobViewModel, JobViewModel>()
+                .RegisterType<ITaskListViewModel, TaskListViewModel>()
+                .RegisterType<ITaskViewModel, TaskViewModel>()
+                .RegisterType<INoteListViewModel, NoteListViewModel>()
+                .RegisterType<INoteViewModel, NoteViewModel>()
+                .RegisterType<IJobStore, DbJob>()
+                .RegisterType<IDomainRepository<IJobStore>, DomainRepository<IJobStore>>()
+                .RegisterType<ITaskStore, DbTask>()
+                .RegisterType<IDomainRepository<ITaskStore>, DomainRepository<ITaskStore>>()
+                .RegisterType<INoteStore, DbNote>()
+                .RegisterType<IDomainRepository<INoteStore>, DomainRepository<INoteStore>>()
+                .RegisterInstance<IStorageConfiguration>(new StorageConfiguration())
+                //.RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
+                //.RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))
+                //.RegisterInstance<Func<IContentManager, ITaskViewModel>>(cm => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm)))
+                //.RegisterInstance<Func<IContentManager, INote, INoteViewModel>>((cm, n) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("note", n)))
+                //.RegisterInstance<Func<IContentManager, INoteViewModel>>((cm) => container.Resolve<INoteViewModel>(new ParameterOverride("contentManager", cm)))
+                //.RegisterInstance<Func<IContentManager, IJobViewModel, INoteListViewModel>>(
+                //    (cm, jvm) =>
+                //    {
+                //        var noteFactory = container.Resolve<Func<IContentManager, INote, INoteViewModel>>();
+                //        var notes = jvm.Job.Notes.Select(n => noteFactory(cm, n));
 
-            //            return container.Resolve<INoteListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialNotes", notes));
-            //        })
-            //    .RegisterInstance<Func<IContentManager, ITaskViewModel, INoteListViewModel>>(
-            //        (cm, tvm) =>
-            //        {
-            //            var noteFactory = container.Resolve<Func<IContentManager, INote, INoteViewModel>>();
-            //            var notes = tvm.Task.Notes.Select(n => noteFactory(cm, n));
+                //        return container.Resolve<INoteListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialNotes", notes));
+                //    })
+                //.RegisterInstance<Func<IContentManager, ITaskViewModel, INoteListViewModel>>(
+                //    (cm, tvm) =>
+                //    {
+                //        var noteFactory = container.Resolve<Func<IContentManager, INote, INoteViewModel>>();
+                //        var notes = tvm.Task.Notes.Select(n => noteFactory(cm, n));
 
-            //            return container.Resolve<INoteListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialNotes", notes));
-            //        })
-            //    .RegisterInstance<Func<IContentManager, IJobViewModel, ITaskListViewModel>>(
-            //        (cm, jvm) =>
-            //        {
-            //            var taskFactory = container.Resolve<Func<IContentManager, ITask, ITaskViewModel>>();
-            //            var tasks = jvm.Job.Tasks.Select(t => taskFactory(cm, t));
+                //        return container.Resolve<INoteListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialNotes", notes));
+                //    })
+                //.RegisterInstance<Func<IContentManager, IJobViewModel, ITaskListViewModel>>(
+                //    (cm, jvm) =>
+                //    {
+                //        var taskFactory = container.Resolve<Func<IContentManager, ITask, ITaskViewModel>>();
+                //        var tasks = jvm.Job.Tasks.Select(t => taskFactory(cm, t));
 
-            //            return container.Resolve<ITaskListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialTasks", tasks));
-            //        })
-            //    .RegisterInstance<Func<IContentManager, ITaskViewModel, ITaskListViewModel>>(
-            //        (cm, jvm) =>
-            //        {
-            //            var taskFactory = container.Resolve<Func<IContentManager, ITask, ITaskViewModel>>();
-            //            var tasks = jvm.Task.Children.Select(c => taskFactory(cm, c));
+                //        return container.Resolve<ITaskListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialTasks", tasks));
+                //    })
+                //.RegisterInstance<Func<IContentManager, ITaskViewModel, ITaskListViewModel>>(
+                //    (cm, jvm) =>
+                //    {
+                //        var taskFactory = container.Resolve<Func<IContentManager, ITask, ITaskViewModel>>();
+                //        var tasks = jvm.Task.Children.Select(c => taskFactory(cm, c));
 
-            //            return container.Resolve<ITaskListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialTasks", tasks));
-            //        });
+                //        return container.Resolve<ITaskListViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("initialTasks", tasks));
+                //    })
+                ;
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)
@@ -101,4 +110,20 @@ namespace Jsc.TaskManager
             container.Dispose();
         }
     }
+
+    //public interface ISomeType { }
+    //public interface ISomeGenericType<T>
+    //{
+    //    void DoSomething(T param);
+    //}
+    //public class SomeImplementation : ISomeType { }
+    //public class SomeGenericImplmentation<T> : ISomeGenericType<T> { }
+
+    //public static class Tester
+    //{
+    //    public static ISomeGenericType<ISomeType> GetInstance()
+    //    {
+    //        return new SomeGenericImplmentation<SomeImplementation>();
+    //    }
+    //}
 }

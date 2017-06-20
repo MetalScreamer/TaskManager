@@ -9,14 +9,16 @@ using System.Text;
 namespace Jsc.TaskManager.DAL
 {
     [Table("Tasks")]
-    class DbTask
+    public class DbTask : ITaskStore
     {
+        public const string TYPE_ID = "task";
+
         [Key]
         public long TaskId { get; private set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public TaskPriority Priority { get; set; }
-        public TaskStatus Status { get; set; }
+        public int Priority { get; set; }
+        public int Status { get; set; }
         public DateTime DueDate { get; set; }
 
         public string ParentTypeId { get; set; }

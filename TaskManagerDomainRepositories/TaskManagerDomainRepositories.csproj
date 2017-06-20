@@ -37,12 +37,14 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IBusinessEntity.cs" />
-    <Compile Include="IDomainRepository.cs" />
-    <Compile Include="IJob.cs" />
     <Compile Include="IJobRepository.cs" />
-    <Compile Include="INote.cs" />
-    <Compile Include="ITask.cs" />
+    <Compile Include="IJobStore.cs" />
+    <Compile Include="IDomainRepository.cs" />
+    <Compile Include="INoteStore.cs" />
+    <Compile Include="IStorageConfiguration.cs" />
+    <Compile Include="IStorageEntity.cs" />
+    <Compile Include="ITaskRepository.cs" />
+    <Compile Include="ITaskStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

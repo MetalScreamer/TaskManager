@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Jsc.TaskManager.DomainRepositories;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -9,8 +10,10 @@ using System.Threading.Tasks;
 namespace Jsc.TaskManager.DAL
 {
     [Table("Jobs")]
-    class DbJob
+    public class DbJob : IJobStore
     {
+        public const string TYPE_ID = "job";
+
         [Key]
         public long JobId { get; private set; }
 

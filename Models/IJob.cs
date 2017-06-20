@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jsc.TaskManager.DomainRepositories
+namespace Jsc.TaskManager.Models
 {
     public interface IJob : IBusinessEntity
     {
