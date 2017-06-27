@@ -40,7 +40,9 @@
     <Compile Include="IJobRepository.cs" />
     <Compile Include="IJobStore.cs" />
     <Compile Include="IDomainRepository.cs" />
+    <Compile Include="INoteRepository.cs" />
     <Compile Include="INoteStore.cs" />
+    <Compile Include="IParent.cs" />
     <Compile Include="IStorageConfiguration.cs" />
     <Compile Include="IStorageEntity.cs" />
     <Compile Include="ITaskRepository.cs" />

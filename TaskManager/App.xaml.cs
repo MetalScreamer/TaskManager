@@ -2,6 +2,7 @@
 using Jsc.TaskManager.DAL;
 using Jsc.TaskManager.DomainRepositories;
 using Jsc.TaskManager.Models;
+using Jsc.TaskManager.Services;
 using Jsc.TaskManager.ViewModels;
 using Microsoft.Practices.Unity;
 using System;
@@ -28,6 +29,23 @@ namespace Jsc.TaskManager
 
             var storageConfiguration = container.Resolve<IStorageConfiguration>();
             storageConfiguration.Initialize();
+
+            var jobRepo = container.Resolve<IJobRepository>();
+            var jobStore = jobRepo.GetById(1);
+            if (jobStore == null)
+            {
+                jobStore = jobRepo.Create();
+                jobStore.Name = "Test";
+                jobStore.Description = "Desc";
+                jobRepo.Add(jobStore);
+            }
+            else
+            {
+                jobStore.Name = "Testing";
+                jobRepo.Update(jobStore);
+            }
+
+
             //var context = container.Resolve<TaskMgrDbContext>();
 
             //var jobRepo = container.Resolve
@@ -58,12 +76,9 @@ namespace Jsc.TaskManager
                 .RegisterType<ITaskViewModel, TaskViewModel>()
                 .RegisterType<INoteListViewModel, NoteListViewModel>()
                 .RegisterType<INoteViewModel, NoteViewModel>()
-                .RegisterType<IJobStore, DbJob>()
-                .RegisterType<IDomainRepository<IJobStore>, DomainRepository<IJobStore>>()
-                .RegisterType<ITaskStore, DbTask>()
-                .RegisterType<IDomainRepository<ITaskStore>, DomainRepository<ITaskStore>>()
-                .RegisterType<INoteStore, DbNote>()
-                .RegisterType<IDomainRepository<INoteStore>, DomainRepository<INoteStore>>()
+                .RegisterType<IJobRepository, JobRepository>()
+                .RegisterType<ITaskRepository, TaskRepository>()
+                .RegisterType<INoteRepository, NoteRepository>()
                 .RegisterInstance<IStorageConfiguration>(new StorageConfiguration())
                 //.RegisterInstance<Func<IContentManager, IJobViewModel>>(cm => container.Resolve<IJobViewModel>(new ParameterOverride("contentManager", cm)))
                 //.RegisterInstance<Func<IContentManager, ITask, ITaskViewModel>>((cm, t) => container.Resolve<ITaskViewModel>(new ParameterOverride("contentManager", cm), new ParameterOverride("task", t)))

@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Jsc.TaskManager.DAL
 {
     [Table("Notes")]
-    public class DbNote : INoteStore
+    class DbNote : INoteStore
     {
         [Key]
         public long NoteId { get; private set; }

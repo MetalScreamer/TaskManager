@@ -9,7 +9,12 @@ namespace Jsc.TaskManager.DAL
 {
     public class TaskRepository : ITaskRepository
     {
-        private DomainRepository<DbTask> repo;
+        private DomainRepository<DbTask> repo = new DomainRepository<DbTask>();
+
+        public ITaskStore Create(IParent parent)
+        {
+            throw new NotImplementedException();
+        }
 
         public void Add(params ITaskStore[] items)
         {
@@ -33,17 +38,12 @@ namespace Jsc.TaskManager.DAL
 
         public ITaskStore GetById(long taskId)
         {
-            return repo.GetSingle(dbTask => dbTask.TaskId == taskId);
+            return repo.GetSingle(t => t.TaskId == taskId);
         }
 
-        public IEnumerable<ITaskStore> GetTasks(IJobStore job)
+        public IEnumerable<ITaskStore> GetTasks(IParent parent)
         {
-            return repo.GetList(dbTask => dbTask.ParentTypeId == DbJob.TYPE_ID && dbTask.ParentRecordId == job.JobId);
-        }
-
-        public IEnumerable<ITaskStore> GetTasks(ITaskStore task)
-        {
-            return repo.GetList(dbTask => dbTask.ParentTypeId == DbTask.TYPE_ID && dbTask.ParentRecordId == task.TaskId);
+            return repo.GetList(t => t.ParentTypeId == parent.ParentTypeId && t.ParentRecordId == parent.ParentRecordId);
         }
     }
 }

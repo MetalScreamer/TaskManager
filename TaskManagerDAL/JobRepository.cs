@@ -10,6 +10,11 @@ namespace Jsc.TaskManager.DAL
     {
         private DomainRepository<DbJob> repo = new DomainRepository<DbJob>();
 
+        public IJobStore Create()
+        {
+            return new DbJob();
+        }
+
         public void Add(params IJobStore[] items)
         {
             repo.Add(items.Cast<DbJob>().ToArray());

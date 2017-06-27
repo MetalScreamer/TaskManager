@@ -9,7 +9,7 @@ using System.Text;
 namespace Jsc.TaskManager.DAL
 {
     [Table("Tasks")]
-    public class DbTask : ITaskStore
+    class DbTask : ITaskStore
     {
         public const string TYPE_ID = "task";
 
@@ -23,5 +23,20 @@ namespace Jsc.TaskManager.DAL
 
         public string ParentTypeId { get; set; }
         public long ParentRecordId { get; set; }
+
+        #region IParent implementation
+
+        string IParent.ParentTypeId
+        {
+            get { return TYPE_ID; }
+        }
+
+        long IParent.ParentRecordId
+        {
+            get { return TaskId; }
+        }
+
+        #endregion
+
     }
 }

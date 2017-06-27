@@ -10,14 +10,24 @@ using System.Threading.Tasks;
 namespace Jsc.TaskManager.DAL
 {
     [Table("Jobs")]
-    public class DbJob : IJobStore
+    class DbJob : IJobStore
     {
-        public const string TYPE_ID = "job";
+        private const string TYPE_ID = "job";
 
         [Key]
         public long JobId { get; private set; }
 
         public string Name { get; set; }
-        public string Description { get; set; }       
+        public string Description { get; set; }
+
+        string IParent.ParentTypeId
+        {
+            get { return TYPE_ID; }
+        }
+
+        long IParent.ParentRecordId
+        {
+            get { return JobId; }
+        }
     }
 }

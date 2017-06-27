@@ -188,6 +188,10 @@
       <Project>{9C509E8C-FDF1-49E5-9649-FE331A3CF6FD}</Project>
       <Name>TaskManagerDomainRepositories</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TaskManagerServices\TaskManagerServices.csproj">
+      <Project>{ba082137-ea71-49d9-8430-63afb99a60a0}</Project>
+      <Name>TaskManagerServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModels2\ViewModels.csproj">
       <Project>{2046b129-0272-4dc1-b55b-5c86f13bf961}</Project>
       <Name>ViewModels</Name>

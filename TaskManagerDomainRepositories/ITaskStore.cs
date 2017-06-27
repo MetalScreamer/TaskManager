@@ -2,7 +2,7 @@
 
 namespace Jsc.TaskManager.DomainRepositories
 {
-    public interface ITaskStore : IStorageEntity
+    public interface ITaskStore : IStorageEntity, IParent
     {
         long TaskId { get; }
         string Name { get; set; }

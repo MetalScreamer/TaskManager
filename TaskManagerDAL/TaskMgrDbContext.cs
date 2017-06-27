@@ -16,6 +16,8 @@ namespace Jsc.TaskManager.DAL
         DbSet<DbTask> Tasks { get; set; }
         DbSet<DbNote> Notes { get; set; }
 
+        public TaskMgrDbContext() : base("TaskManager") { }
+
         public static void Initialize()
         {
             Database.SetInitializer(new DropCreateDatabaseIfModelChanges<TaskMgrDbContext>());

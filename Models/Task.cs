@@ -1,4 +1,5 @@
 ﻿using Jsc.TaskManager.DomainRepositories;
+using Jsc.TaskManager.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

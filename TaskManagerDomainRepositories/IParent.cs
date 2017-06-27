@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Jsc.TaskManager.DomainRepositories
 {
-    public interface IJobStore : IStorageEntity, IParent
+    public interface IParent
     {
-        long JobId { get; }
-        string Name { get; set; }
-        string Description { get; set; }
+        string ParentTypeId { get; }
+        long ParentRecordId { get; }
     }
 }

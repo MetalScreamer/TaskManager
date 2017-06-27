@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Jsc.TaskManager.Models
+namespace Jsc.TaskManager.Services
 {
     public interface IBusinessEntity
     {
