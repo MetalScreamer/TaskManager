@@ -8,7 +8,7 @@ namespace Jsc.TaskManager.Services
 {
     public interface IJob : IBusinessEntity
     {
-        string Name { get; set; }
+        string Name { get; set; }   
         string Description { get; set; }
         IList<ITask> Tasks { get; }
         IList<INote> Notes { get; }

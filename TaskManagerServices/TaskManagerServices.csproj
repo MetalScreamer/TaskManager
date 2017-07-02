@@ -36,7 +36,7 @@
   <ItemGroup>
     <Compile Include="IBusinessEntity.cs" />
     <Compile Include="IJob.cs" />
-    <Compile Include="IJobService.cs" />
+    <Compile Include="ITaskService.cs" />
     <Compile Include="INote.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
